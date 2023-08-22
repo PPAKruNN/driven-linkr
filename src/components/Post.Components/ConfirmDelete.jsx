@@ -21,7 +21,7 @@ export function ConfirmDelete(props){
     }
     return(
 
-        <CsConfirmDelete toggle={toggle}>
+        <CsConfirmDelete toggle={toggle ? 'true' : 'false'}>
             <div className="container">
                 <div className="question">
                     <p>Are you sure you want</p>
@@ -51,7 +51,7 @@ const CsConfirmDelete = styled.div`
     height: 100vh;
     background-color: rgba(255, 255, 255, 0.7);
 
-    display: ${ p=> p.toggle ?'flex' : 'none'};
+    display: ${ p=> p.toggle==='true' ?'flex' : 'none'};
     align-items: center;
     justify-content: center;
 
