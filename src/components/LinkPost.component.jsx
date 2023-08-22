@@ -36,7 +36,7 @@ function LinkPost({post}) {
 const LinkPostContainer = styled.div`
   width: 100%;
   height: fit-content;
-  max-height: 80%;
+  max-height: 70%;
   border-radius: 11px;
   border: 1.5px solid #4d4d4d;
   display: flex;
@@ -48,25 +48,26 @@ const LinkPostContainerRight = styled.div`
 `
 
 const LinkPostContainerLeft = styled.div`
-  width: 80%;
+  width: 70%;
   box-sizing: border-box;
   margin: 10px 0 10px 0;
   padding: 16px;
 
   p {
     font-size: 16px;
-    line-height: 16px;
+    line-height: 20px;
   }
 
 
   h2 {
     font-size: 16px;
+    line-height: 16px;
   }
 `
 
 const LinkPostImage = styled.img`
-  width: 100%;
-  height: 100%;
+  width: 90%;
+  height: 90%;
   object-fit: cover;
   border-top-right-radius: 11px;
   border-bottom-right-radius: 11px;

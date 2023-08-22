@@ -61,18 +61,7 @@ export default function TimelinePosts() {
 }
 
 const Container = styled.div`
-  font-family: "Lato";
-  color: white;
-  line-height: 1.6em;
   width: 100%;
-  height: fit-content;
-  min-height: 210px;
-  display: flex;
-  flex-direction: column;
-  border-radius: 16px;
-  background-color: #171717;
-  padding: 10px;
-  margin-bottom: 20px;
 
   p {
     font-size: 25px;
