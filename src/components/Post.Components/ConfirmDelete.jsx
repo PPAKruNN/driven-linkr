@@ -12,7 +12,7 @@ export function ConfirmDelete(props){
 
     const handleConfirm = (choice)=>{
         if(choice==='yes'){
-            axios.delete(`${process.env.REACT_APP_API_URL}/post/${id}` ,config)
+            axios.delete(`${process.env.REACT_APP_API_URL}/posts/${id}`,config)
             .then(res=>{
                 console.log(res)
                 setToggle(!toggle);
