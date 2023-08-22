@@ -44,7 +44,7 @@ export function LikeComponent(props){
                 data-tooltip-id="details"
                 data-tooltip-content={detail}
             >
-                {likeCount} {likeCount === "1" ? "like" : "likes"} 
+                {String(Number(likeCount) + (isLiked ? 1 : 0))} {likeCount === "1" ? "like" : "likes"} 
             </div>
             <Tooltip 
                 data-test="tooltip"
