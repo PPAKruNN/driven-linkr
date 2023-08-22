@@ -16,6 +16,7 @@ export function ConfirmDelete(props){
             .then(res=>{
                 console.log(res)
                 setToggle(!toggle);
+                window.reload();
             }).catch(err=>{
                 console.log(err)
                 setToggle(!toggle);
