@@ -52,6 +52,13 @@ const LinkPostContainerLeft = styled.div`
   box-sizing: border-box;
   margin: 10px 0 10px 0;
   padding: 16px;
+
+  p {
+    font-size: 16px;
+    line-height: 16px;
+  }
+
+
   h2 {
     font-size: 16px;
   }
