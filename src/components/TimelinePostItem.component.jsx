@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import userIcon from "../assets/images/icons/userIcon.jpeg";
 import { Link } from "react-router-dom";
 import reactStringReplace from "react-string-replace";
+import useAuth from "../hooks/useAuth";
 
   
 
@@ -18,8 +19,19 @@ export default function TimelinePostItem({ post }) {
   const [toggle, setToggle] = useState(false);
   const [editing, setEditing] = useState(false);
   const [textValue, setTextValue] = useState(description);
+  const { token, auth } = useAuth();
+  const config = { headers: { Authorization: `Bearer ${token}` } };
+
   const handleEditClick = () => {
-      setEditing(!editing);
+
+      axios.put(`${process.env.REACT_APP_API_URL}/post/${id}`, {textValue}, config )
+      .then(res=>{
+          console.log(res);
+          window.reload();
+      }).catch(err=>{
+        console.log(err)
+        setEditing(!editing);
+      })
   };
   const navigate = useNavigate();
 
