@@ -2,9 +2,7 @@ import React from "react";
 import { styled } from "styled-components";
 import imageLink from "../assets/images/icons/react.png";
 
-function LinkPost({post}) {
-
-  const {urlTitle, link, urlDescr, urlImg} = post;
+function LinkPost({metadata, link}) {
 
   return (
     <LinkPostContainer 
@@ -14,9 +12,9 @@ function LinkPost({post}) {
     rel="noopener noreferrer">
 
       <LinkPostContainerLeft>
-        <h2>{urlTitle}</h2>
+        <h2>{metadata.title}</h2>
         <p>
-          {urlDescr}
+          {metadata.description}
         </p>
         <a href={link}>
           <p>{link}</p>
@@ -24,7 +22,7 @@ function LinkPost({post}) {
       </LinkPostContainerLeft>
       <LinkPostContainerRight>
         <a href={link}>
-          <LinkPostImage src={!urlImg ?imageLink :urlImg} />
+          <LinkPostImage src={!metadata.images ? imageLink : metadata.images[0]} />
         </a>
       </LinkPostContainerRight>
 

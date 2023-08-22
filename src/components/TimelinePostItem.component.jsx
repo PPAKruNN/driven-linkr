@@ -13,8 +13,9 @@ import reactStringReplace from "react-string-replace";
 
 export default function TimelinePostItem({ post }) {
   const {description, userName, profileUrl, id} = post;
+
   const textRef = useRef(null);
-  const [isLiked, setIsLiked] = useState(false);
+  const [isLiked, setIsLiked] = useState(post.liked);
   const [toggle, setToggle] = useState(false);
   const [editing, setEditing] = useState(false);
   const [textValue, setTextValue] = useState(description);
@@ -57,6 +58,7 @@ export default function TimelinePostItem({ post }) {
             idPost={id}
             isLiked={isLiked}
             setIsLiked={setIsLiked}
+            likeCount={post.LikeCount}
         />
       </TimeLinePostLeft>
 
@@ -95,7 +97,7 @@ export default function TimelinePostItem({ post }) {
               <p data-test="description">{convertHashtagsToLinks(textValue)}</p></>
             )}
 
-        <LinkPost post={post} />
+        <LinkPost metadata={post.metadata} link={post.link}/>
       </TimeLinePostRight>
     </TimelinePost>
   );

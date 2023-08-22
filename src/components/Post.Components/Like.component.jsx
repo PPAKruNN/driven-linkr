@@ -10,7 +10,7 @@ export function LikeComponent(props){
 
     const { token, auth } = useAuth();
     const config = { headers: { Authorization: `Bearer ${token}` } };
-    const{isLiked, setIsLiked, idPost} = props;
+    const{likeCount, isLiked, setIsLiked, idPost} = props;
     const detail = `Maria João e outras 12 pessoas`;
     const handleLike = ()=>{
         axios.post(`${API_URL}/handleLIke`,{postId:idPost}, config)
@@ -44,7 +44,7 @@ export function LikeComponent(props){
                 data-tooltip-id="details"
                 data-tooltip-content={detail}
             >
-                14 likes
+                {likeCount} {likeCount === "1" ? "like" : "likes"} 
             </div>
             <Tooltip 
                 data-test="tooltip"
