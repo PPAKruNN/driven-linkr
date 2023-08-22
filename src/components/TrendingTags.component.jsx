@@ -41,7 +41,7 @@ function TrendingTags() {
       <TrendingTagsContainer>
         {trendingTags.map((tag, index) => (
           <Tag data-test="hashtag" key={index} onClick={() => handleTagClick(tag)}>
-            #{tag}
+            {tag}
           </Tag>
         ))}
       </TrendingTagsContainer>
@@ -68,6 +68,7 @@ const TrendingTagsContainer = styled.div`
     font-size: 27px;
     margin-left: 8px;
     font-family: "Oswald";
+    margin: 9px 0 0 16px
   }
 
   p {
@@ -76,6 +77,7 @@ const TrendingTagsContainer = styled.div`
     font-size: 19px;
     margin-bottom: 8px;
     margin-top: 15px;
+    margin-left: 16px;
   }
 `;
 

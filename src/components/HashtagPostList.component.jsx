@@ -14,8 +14,6 @@ function HashtagPosts({ tagName }) {
   const [error, setError] = useState(false);
   const [emptyPage, setEmptyPage] = useState(false);
 
-  console.log(tagName);
-
   useEffect(() => {
     axios
       .get(`${API_URL}/hashtag/${tagName}`, config)
@@ -26,14 +24,14 @@ function HashtagPosts({ tagName }) {
         setLoading(false);
       })
       .catch((err) => {
-        // console.error(err);
+        console.error(err.response.data);
         setError(true);
         setLoading(false);
         alert(
           "An error occurred while trying to fetch the hashtag's posts, please refresh the page"
         );
       });
-  }, []);
+  }, [tagName]);
 
   return (
     <div>
