@@ -67,7 +67,7 @@ const Container = styled.div`
   height: fit-content;
   min-height: 210px;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   border-radius: 16px;
   background-color: #171717;
   padding: 10px;
