@@ -7,7 +7,7 @@ import TrendingTags from "../components/TrendingTags.component";
 
 function Hashtag() {
   const { tagName } = useParams();
-  console.log(tagName);
+
   return (
     <TagPageContainer>
       <Nav />
