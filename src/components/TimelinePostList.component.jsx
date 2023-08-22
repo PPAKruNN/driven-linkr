@@ -17,12 +17,13 @@ export default function TimelinePosts() {
   const [emptyPage, setEmptyPage] = useState(false);
 
   useEffect(() => {
+    console.log(token);
     axios
       .get(`${API_URL}/posts`, config)
       .then((res) => {
-        console.log(res.data.results)
-        if (Array.isArray(res.data.results)) {
-          setPosts(res.data.results);
+        console.log(res.data)
+        if (Array.isArray(res.data)) {
+          setPosts(res.data);
           setLoading(false);
         } else {
           console.error(res.data);
