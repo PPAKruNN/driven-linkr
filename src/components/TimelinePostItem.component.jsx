@@ -3,18 +3,16 @@ import { styled } from "styled-components";
 import LinkPost from "./LinkPost.component";
 import { LikeComponent } from "./Post.Components/Like.component";
 import { EditOrDelete } from "./Post.Components/EditOrDelete";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import userIcon from "../assets/images/icons/userIcon.jpeg";
-import useAuth from "../hooks/useAuth";
 import { Link } from "react-router-dom";
 import reactStringReplace from "react-string-replace";
 
   
 
 export default function TimelinePostItem({ post }) {
-  const {description, link, userName, profileUrl, id} = post;
-  const { auth } = useAuth();
+  const {description, userName, profileUrl, id} = post;
   const textRef = useRef(null);
   const [isLiked, setIsLiked] = useState(false);
   const [toggle, setToggle] = useState(false);
@@ -48,7 +46,7 @@ export default function TimelinePostItem({ post }) {
     ));
   };
 
-  const descriptionConvertedHashtags = convertHashtagsToLinks(description);
+  const descriptionConvertedHashtags = convertHashtagsToLinks(textValue);
 
   return (
     <TimelinePost>
@@ -93,12 +91,10 @@ export default function TimelinePostItem({ post }) {
                     }}
                   />
                 </>
-  
             ) : (<>
-              <p>{textValue}</p></>
+              <p data-test="description">{convertHashtagsToLinks(textValue)}</p></>
             )}
 
-        <p data-test="description">{convertHashtagsToLinks(description)}</p>
         <LinkPost post={post} />
       </TimeLinePostRight>
     </TimelinePost>
@@ -128,7 +124,9 @@ const TimeLinePostLeft = styled.div`
   align-items: center;
   padding: 10px;
 `;
+
 const TimeLinePostRight = styled.div`
+  width: 90%;
   display: flex;
   flex-direction: column;
   padding: 10px;
