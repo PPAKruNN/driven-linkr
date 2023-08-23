@@ -8,25 +8,41 @@ import { useNavigate } from "react-router-dom";
 import userIcon from "../assets/images/icons/userIcon.jpeg";
 import { Link } from "react-router-dom";
 import reactStringReplace from "react-string-replace";
+import useAuth from "../hooks/useAuth";
+import axios from "axios";
 
   
 
 export default function TimelinePostItem({ post }) {
   const {description, userName, profileUrl, id} = post;
-
   const textRef = useRef(null);
-  const [isLiked, setIsLiked] = useState(post.liked);
+  const [isLiked, setIsLiked] = useState(false);
   const [toggle, setToggle] = useState(false);
   const [editing, setEditing] = useState(false);
   const [textValue, setTextValue] = useState(description);
-  const handleEditClick = () => {
-      setEditing(!editing);
+  const { token, auth } = useAuth();
+  const config = { headers: { Authorization: `Bearer ${token}` } };
+
+  const handleEditClick = () => {   
+    setEditing(!editing);
+    textRef.current.focus();
   };
   const navigate = useNavigate();
 
   const handleKey = (e) => {
     if (e.keyCode === 27) return setEditing(!editing);
     if (e.keyCode !== 13) return;
+    const valorTextRef= textRef.current.value;
+
+    axios.put(`${process.env.REACT_APP_API_URL}/post/${id}`, {valorTextRef}, config )
+    .then(res=>{
+      setTextValue(valorTextRef)
+        console.log(res);
+        window.reload();
+    }).catch(err=>{
+      console.log(err)
+      
+    })
 
     setTextValue(textRef.current.value);
     setEditing(false);
@@ -58,7 +74,6 @@ export default function TimelinePostItem({ post }) {
             idPost={id}
             isLiked={isLiked}
             setIsLiked={setIsLiked}
-            likeCount={post.LikeCount}
         />
       </TimeLinePostLeft>
 
@@ -97,7 +112,7 @@ export default function TimelinePostItem({ post }) {
               <p data-test="description">{convertHashtagsToLinks(textValue)}</p></>
             )}
 
-        <LinkPost metadata={post.metadata} link={post.link}/>
+        <LinkPost post={post} />
       </TimeLinePostRight>
     </TimelinePost>
   );
