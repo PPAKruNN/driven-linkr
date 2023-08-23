@@ -10,14 +10,21 @@ export function ConfirmDelete(props){
     const config = { headers: { Authorization: `Bearer ${token}` } };
 
 
-    const handleConfirm = ()=>{
-        axios.post(`${process.env.REACT_APP_API_URL}/deletePost`,{userId: auth.userId , id } ,config)
+    const handleConfirm = (choice)=>{
+        if(choice==='yes'){
+            axios.delete(`${process.env.REACT_APP_API_URL}/posts/${id}`,config)
             .then(res=>{
                 console.log(res)
+                setToggle(!toggle);
+                window.reload();
             }).catch(err=>{
                 console.log(err)
+                setToggle(!toggle);
             })
-        setToggle(!toggle);
+        }else{
+            setToggle(!toggle);
+        }       
+        
     }
     return(
 
@@ -29,10 +36,10 @@ export function ConfirmDelete(props){
                                 
                 </div>
                 <div className="options">
-                    <div data-test="cancel" className="no option" onClick={handleConfirm}>
+                    <div data-test="cancel" className="no option" onClick={()=>handleConfirm('no')}>
                         No, go back
                     </div>
-                    <div data-test="confirm"className="yes option" onClick={handleConfirm}>
+                    <div data-test="confirm"className="yes option" onClick={()=>handleConfirm('yes')}>
                         Yes, delete it
                     </div>
                 </div>
