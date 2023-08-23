@@ -61,7 +61,6 @@ export default function TimelinePosts() {
 }
 
 const Container = styled.div`
-  width: 100%;
 
   p {
     font-size: 25px;
@@ -69,9 +68,8 @@ const Container = styled.div`
 `
 
 const Image = styled.img`
-  margin-top: 50px;
-  width: 10vw;
-  height: 10vh;
+  width: 20vw;
+  height: 20vh;
 `
 
 
