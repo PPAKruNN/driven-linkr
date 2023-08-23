@@ -24,16 +24,6 @@ export default function TimelinePostItem({ post }) {
   const config = { headers: { Authorization: `Bearer ${token}` } };
 
   const handleEditClick = () => {
-
-      axios.put(`${process.env.REACT_APP_API_URL}/post/${id}`, {textRef.current.value}, config )
-      .then(res=>{
-        setTextValue(textRef.current.value)
-          console.log(res);
-          window.reload();
-      }).catch(err=>{
-        console.log(err)
-        setEditing(!editing);
-      })
   };
   const navigate = useNavigate();
 
