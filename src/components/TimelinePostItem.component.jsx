@@ -41,11 +41,12 @@ export default function TimelinePostItem({ post }) {
         window.reload();
     }).catch(err=>{
       console.log(err)
+      setEditing(false);
       
     })
 
-    setTextValue(textRef.current.value);
-    setEditing(false);
+   
+    
   };
 
   function handleClick() {
