@@ -4,6 +4,8 @@ import useAuth from "../hooks/useAuth";
 import axios from "axios";
 import loadingImage from "../assets/images/icons/loadingImage.gif";
 import { styled } from "styled-components";
+import InfiniteScroll from 'react-infinite-scroller';
+
 
 export default function TimelinePosts() {
   const API_URL = process.env.REACT_APP_API_URL;
@@ -15,6 +17,7 @@ export default function TimelinePosts() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [emptyPage, setEmptyPage] = useState(false);
+  const [hasMore, setHasMore]=useState(true);
 
   useEffect(() => {
     console.log(token);
@@ -43,18 +46,32 @@ export default function TimelinePosts() {
         );
       });
   }, []);
+  const loadFunc = ()=>{
+    alert('oi')
+    setTimeout(()=>{
+      
+    }, 7000)
+  }
 
   return (
     <Container>
       {loading ? (
-         <Image src={loadingImage} alt="Loading..." />
+        <Image src={loadingImage} alt="Loading..." />
       ) : error ? (
         <p> An error occurred while trying to fetch the posts, please refresh
-        the page </p>
+          the page </p>
       ) : emptyPage ? (
         <p data-test="message">There are no posts yet</p>
-      ) :  (
-        posts.map((post) => <TimelinePostItem data-test="post" key={post.id} post={post} />)
+      ) : (
+        <InfiniteScroll
+          pageStart={0}
+          loadMore={loadFunc}
+          hasMore={hasMore}
+          loader={<div className="loader" key={0}>Loading ...</div>}
+        >
+          {posts.map((post) => <TimelinePostItem data-test="post" key={post.id} post={post} />)} // <-- This is the content you want to load
+        </InfiniteScroll>       
+        
       )}
     </Container>
   );
