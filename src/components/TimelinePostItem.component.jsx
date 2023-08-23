@@ -25,8 +25,9 @@ export default function TimelinePostItem({ post }) {
 
   const handleEditClick = () => {
 
-      axios.put(`${process.env.REACT_APP_API_URL}/post/${id}`, {textValue}, config )
+      axios.put(`${process.env.REACT_APP_API_URL}/post/${id}`, {textRef.current.value}, config )
       .then(res=>{
+        setTextValue(textRef.current.value)
           console.log(res);
           window.reload();
       }).catch(err=>{
