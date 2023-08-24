@@ -17,7 +17,8 @@ export default function TimelinePosts() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [emptyPage, setEmptyPage] = useState(false);
-  const [hasMore, setHasMore]=useState(true);
+  const [hasMore, setHasMore] = useState(true);
+  const [currentPage, setCurrentPage] = useState(0);
 
   useEffect(() => {
     console.log(token);
@@ -45,13 +46,23 @@ export default function TimelinePosts() {
           "An error occurred while trying to fetch the posts, please refresh the page"
         );
       });
-  }, []);
-  const loadFunc = ()=>{
-    alert('oi')
-    setTimeout(()=>{
-      
-    }, 7000)
-  }
+  }, [currentPage]);
+    const loadFunc = () => {
+      axios
+        .get(`${API_URL}/posts?offset=${currentPage + 10}`, config)
+        .then((res) => {
+          const newPosts = posts.concat(res.data);
+          if (newPosts.length > 0) {
+            setPosts(newPosts);
+            setCurrentPage(currentPage + 10);
+          } else {
+            setHasMore(false);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
 
   return (
     <Container>
@@ -64,14 +75,14 @@ export default function TimelinePosts() {
         <p data-test="message">There are no posts yet</p>
       ) : (
         <InfiniteScroll
-          pageStart={0}
-          loadMore={loadFunc}
-          hasMore={hasMore}
-          loader={<div className="loader" key={0}>Loading ...</div>}
+          pageStart={0} valor default  de pagina inicial mas não ta sendo exibido pagina
+          loadMore={loadFunc}//aquii é uma func que vai ser chamada sempre que o scroll chegar ao final
+          hasMore={hasMore}//se isso for false ele não chama a func msm que o scroll chegue ao final
+          loader={<div className="loader" key={0}>Loading ...</div>}//teta de load que vai ser ser exibida enquanto não renderiza os componentes
         >
-          {posts.map((post) => <TimelinePostItem data-test="post" key={post.id} post={post} />)} // <-- This is the content you want to load
-        </InfiniteScroll>       
-        
+          {posts.map((post) => <TimelinePostItem data-test="post" key={post.id} post={post} />)}
+        </InfiniteScroll>
+
       )}
     </Container>
   );
