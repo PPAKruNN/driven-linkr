@@ -12,8 +12,8 @@ const SideBarContainer = styled.div`
   flex: 1;
   margin-left: 40px;
   display: flex;
-  justify-content: space-between;
   align-items: start;
+  flex-direction: column;
 `;
 
 const PostsContainer = styled.div`
@@ -31,13 +31,82 @@ const PostsContainer = styled.div`
 const PostsHeaderContainer = styled.div`
   display: flex;
   align-items: center;
-  gap: 18px;
-  
+  justify-content: space-between;
+  min-width: 913px;
+
   img {
     width: 50px;
     height: 50px;
     border-radius: 50%;
     margin-top: 30px;
+  }
+
+  div {
+    display: flex;
+    gap: 18px;
+    align-items: center;
+  }
+`;
+
+const FollowButton = styled.button`
+  width: 112px;
+  height: 31px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  background: #1877f2;
+  margin-top: 85px;
+  align-self: end;
+  cursor: pointer;
+
+  &:hover {
+    background: #42a5f5;
+  }
+
+  &:disabled {
+    background: #012f6b;
+    cursor: not-allowed;
+  }
+
+  p {
+    color: #fff;
+    font-family: Lato;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+  }
+`;
+
+const UnFollowButton = styled.button`
+  width: 112px;
+  height: 31px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  background: #fff;
+  margin-top: 85px;
+  align-self: end;
+  cursor: pointer;
+
+  &:hover {
+    background: #e3e3e3;
+  }
+
+  &:disabled {
+    background: #012f6b;
+    cursor: not-allowed;
+  }
+
+  p {
+    color: #1877f2;
+    font-family: Lato;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
   }
 `;
 
@@ -46,4 +115,6 @@ export {
   SideBarContainer,
   PostsContainer,
   PostsHeaderContainer,
+  FollowButton,
+  UnFollowButton,
 };

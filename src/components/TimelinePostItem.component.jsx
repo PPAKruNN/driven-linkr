@@ -14,7 +14,7 @@ import axios from "axios";
   
 
 export default function TimelinePostItem({ post }) {
-  const {description, userName, profileUrl, id} = post;
+  const {description, userName, profileUrl, id, author} = post;
 
   const textRef = useRef(null);
   const [isLiked, setIsLiked] = useState(post.liked);
@@ -37,7 +37,7 @@ export default function TimelinePostItem({ post }) {
   };
 
   function handleClick() {
-    navigate(`/user/${post.userId}`);
+    navigate(`/user/${author}`);
   }
 
   const convertHashtagsToLinks = (text) => {
