@@ -105,7 +105,7 @@ export default function UserPage() {
             <h1>{`${posts[0].userName}'s posts`}</h1>
           </div>
         </PostsHeaderContainer>
-        {posts.length > 0 ? (
+        {posts[0].description ? (
           posts.map((post) =>
             post.link ? (
               <TimelinePostItem data-test="post" key={post.id} post={post} />
@@ -114,7 +114,7 @@ export default function UserPage() {
             )
           )
         ) : (
-          <h1>This user has no posts yet</h1>
+          <h1>This user hasn't posted anything yet.</h1>
         )}
       </PostsContainer>
       <SideBarContainer>

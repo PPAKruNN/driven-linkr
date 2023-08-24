@@ -15,6 +15,7 @@ const SideBarContainer = styled.div`
   align-items: start;
   flex-direction: column;
   gap: 60px;
+  z-index: 0;
 `;
 
 const PostsContainer = styled.div`

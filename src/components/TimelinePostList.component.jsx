@@ -4,9 +4,9 @@ import useAuth from "../hooks/useAuth";
 import axios from "axios";
 import loadingImage from "../assets/images/icons/loadingImage.gif";
 import { styled } from "styled-components";
+import useUserContext from "../hooks/useUserContext";
 
 export default function TimelinePosts() {
-
   const API_URL = process.env.REACT_APP_API_URL;
   const { token } = useAuth();
   const config = { headers: { Authorization: `Bearer ${token}` } };
@@ -19,7 +19,7 @@ export default function TimelinePosts() {
   const [sharing, setSharing] = useState(false);
   const [repostCount, setRepostCount] = useState({});
   const [selectedPostId, setSelectedPostId] = useState(null);
-
+  const { following } = useUserContext();
 
   //CARREGAR POSTS
   useEffect(() => {
@@ -27,9 +27,12 @@ export default function TimelinePosts() {
     axios
       .get(`${API_URL}/posts`, config)
       .then((res) => {
-        console.log(res.data)
+        console.log(res.data);
         if (Array.isArray(res.data)) {
-          setPosts(res.data);
+          const followingResults = res.data.filter((post) =>
+            following.includes(post.author)
+          );
+          setPosts(followingResults);
           setLoading(false);
         } else {
           console.error(res.data);
@@ -50,7 +53,6 @@ export default function TimelinePosts() {
       });
   }, []);
 
-
   // BUSCAR REPOSTS
   const getRepost = useCallback(async () => {
     try {
@@ -70,61 +72,57 @@ export default function TimelinePosts() {
     }
   }, [config]);
 
-
   //REPOSTAR
-    const postRepost = useCallback(async () => {
-      setSharing(true);
-  
-      try {
-        await axios.post(
-          `${API_URL}/posts/${selectedPostId}/repost`,
-          {},
-          config
-        );
-  
-        setRepostCount((prevRepostCount) => ({
-          ...prevRepostCount,
-          [selectedPostId]: (prevRepostCount[selectedPostId] || 0) + 1,
-        }));
-  
-        setShowRepost(false);
-      } 
-      catch (error) {
-        console.error(error);
-        alert("An error occurred while reposting the post");
-      } 
-      finally {
-        setSharing(false);
-      }
-    }, [config, selectedPostId]);
+  const postRepost = useCallback(async () => {
+    setSharing(true);
 
+    try {
+      await axios.post(`${API_URL}/posts/${selectedPostId}/repost`, {}, config);
+
+      setRepostCount((prevRepostCount) => ({
+        ...prevRepostCount,
+        [selectedPostId]: (prevRepostCount[selectedPostId] || 0) + 1,
+      }));
+
+      setShowRepost(false);
+    } catch (error) {
+      console.error(error);
+      alert("An error occurred while reposting the post");
+    } finally {
+      setSharing(false);
+    }
+  }, [config, selectedPostId]);
 
   return (
     <Container>
       {loading ? (
-         <Image src={loadingImage} alt="Loading..." />
+        <Image src={loadingImage} alt="Loading..." />
       ) : error ? (
-        <p> An error occurred while trying to fetch the posts, please refresh
-        the page </p>
-      ) : emptyPage ? (
-        <p data-test="message">There are no posts yet</p>
-      ) :  (
-        posts.map((post) => <TimelinePostItem data-test="post" key={post.id} post={post} />)
+        <p>
+          {" "}
+          An error occurred while trying to fetch the posts, please refresh the
+          page{" "}
+        </p>
+      ) : following.length === 0 ? (
+        <p data-test="message">You don't follow anyone yet. Search for new friends!</p>
+      ) : posts.length === 0 ? (
+        <p data-test="message">No posts found from your friends</p>
+      ) : (
+        posts.map((post) => (
+          <TimelinePostItem data-test="post" key={post.id} post={post} />
+        ))
       )}
     </Container>
   );
 }
 
 const Container = styled.div`
-
   p {
     font-size: 25px;
   }
-`
+`;
 
 const Image = styled.img`
   width: 20vw;
   height: 20vh;
-`
-
-
+`;
