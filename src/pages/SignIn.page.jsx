@@ -5,11 +5,13 @@ import api from "../services/api";
 import useAuth from "../hooks/useAuth";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
+import useUserContext from "../hooks/useUserContext";
 
 function SignIn() {
   
   const navigate = useNavigate();
   const auth = useAuth();
+  const { setUserData } = useUserContext();
 
   const email = useRef();
   const password = useRef();
@@ -33,6 +35,7 @@ function SignIn() {
       // const userData = await api.getUserById(response.data.id); // Endpoint ainda nào existe.
 
       const userData = response.data
+      setUserData(userData);
 
       auth.login(userData, response.data.token); 
       navigate("/home");      

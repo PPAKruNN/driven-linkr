@@ -34,11 +34,18 @@ function signUp(payload) {
   return promisse;
 }
 
+function followUser(auth, id) {
+  const promise = axios.post(`${API_URL}/users/${id}/follow`, tokenProvider(auth));
+
+  return promise;
+}
+
 const api = {
   searchUsers,
   signIn,
   signUp,
   getUserPosts,
+  followUser,
 };
 
 export default api;
