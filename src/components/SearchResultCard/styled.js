@@ -32,6 +32,8 @@ const SearchResultCardWrapper = styled.div`
 
 const SearchResultCardLink = styled(Link)`
   text-decoration: none;
+  display: flex;
+  gap: 7px;
   &:hover {
     cursor: pointer;
     color: #63edff;
@@ -42,6 +44,11 @@ const SearchResultCardLink = styled(Link)`
   font-style: normal;
   font-weight: 400;
   line-height: normal;
+
+  span {
+    color: #C5C5C5;
+  }
+
 `;
 
 export { SearchResultCardWrapper, SearchResultCardLink };
