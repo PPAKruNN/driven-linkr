@@ -11,7 +11,7 @@ function SignIn() {
   
   const navigate = useNavigate();
   const auth = useAuth();
-  const { setUserData } = useUserContext();
+  const { setUserData, setFollowingData } = useUserContext();
 
   const email = useRef();
   const password = useRef();
@@ -36,6 +36,11 @@ function SignIn() {
 
       const userData = response.data
       setUserData(userData);
+
+      const { userId, token } = userData;
+
+      const following = await api.getFollowing(token, userId);
+      setFollowingData(following.data);
 
       auth.login(userData, response.data.token); 
       navigate("/home");      

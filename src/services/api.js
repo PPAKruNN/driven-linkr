@@ -35,7 +35,19 @@ function signUp(payload) {
 }
 
 function followUser(auth, id) {
-  const promise = axios.post(`${API_URL}/users/${id}/follow`, tokenProvider(auth));
+  const promise = axios.post(`${API_URL}/users/${id}/follow`, {}, tokenProvider(auth));
+  
+  return promise;
+}
+
+function getFollowing(auth) {
+  const promise = axios.get(`${API_URL}/users/following`, tokenProvider(auth));
+
+  return promise;
+}
+
+function unFollowUser(auth, id) {
+  const promise = axios.delete(`${API_URL}/users/${id}/unfollow`, tokenProvider(auth));
 
   return promise;
 }
@@ -46,6 +58,9 @@ const api = {
   signUp,
   getUserPosts,
   followUser,
+  unFollowUser,
+  getFollowing,
+  unFollowUser,
 };
 
 export default api;

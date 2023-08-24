@@ -59,14 +59,51 @@ const FollowButton = styled.button`
   margin-top: 85px;
   align-self: end;
   cursor: pointer;
+
   &:hover {
     background: #42a5f5;
+  }
+
+  &:disabled {
+    background: #012f6b;
+    cursor: not-allowed;
   }
 
   p {
     color: #fff;
     font-family: Lato;
-    font-size: 15px;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+  }
+`;
+
+const UnFollowButton = styled.button`
+  width: 112px;
+  height: 31px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  background: #fff;
+  margin-top: 85px;
+  align-self: end;
+  cursor: pointer;
+
+  &:hover {
+    background: #e3e3e3;
+  }
+
+  &:disabled {
+    background: #012f6b;
+    cursor: not-allowed;
+  }
+
+  p {
+    color: #1877f2;
+    font-family: Lato;
+    font-size: 14px;
     font-style: normal;
     font-weight: 700;
     line-height: normal;
@@ -79,4 +116,5 @@ export {
   PostsContainer,
   PostsHeaderContainer,
   FollowButton,
+  UnFollowButton,
 };

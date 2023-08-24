@@ -6,9 +6,10 @@ import {
   SideBarContainer,
   PostsHeaderContainer,
   FollowButton,
+  UnFollowButton,
 } from "./styled.js";
 import { useParams, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import api from "../../services/api";
 import TimelinePostItem from "../../components/TimelinePostItem.component";
 import useAuth from "../../hooks/useAuth";
@@ -21,7 +22,9 @@ export default function UserPage() {
   const [error, setError] = useState(false);
   const { auth } = useAuth();
   const navigate = useNavigate();
-  const { user } = useUserContext();
+  const { user, following, setFollowingData } = useUserContext();
+  const followButton = useRef();
+  const unfollowButton = useRef();
 
   useEffect(() => {
     if (!auth || !Number.isInteger(Number(id))) {
@@ -53,7 +56,35 @@ export default function UserPage() {
           "An error occurred while trying to fetch the posts, please refresh the page"
         );
       });
-  }, []);
+  }, [following]);
+
+  function followUser() {
+    followButton.current.disabled = true;
+    const promise = api.followUser(auth.token, id);
+
+    promise
+      .then(() => {
+        setFollowingData([...following, Number(id)]);
+        followButton.current.disabled = false;
+      })
+      .catch((err) => {
+        console.error(err.response.data);
+      });
+  }
+
+  function unFollowUser() {
+    unfollowButton.current.disabled = true;
+    const promise = api.unFollowUser(auth.token, id);
+
+    promise
+      .then(() => {
+        setFollowingData(following.filter((followedId) => followedId !== Number(id)));
+        unfollowButton.current.disabled = false;
+      })
+      .catch((err) => {
+        console.error(err.response.data);
+      });
+  }
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error loading posts</p>;
@@ -81,10 +112,16 @@ export default function UserPage() {
         )}
       </PostsContainer>
       <SideBarContainer>
-        {Number(id) !== user.userId && (
-          <FollowButton onClick={() => api.followUser(auth.token, id)}>
+        {Number(id) !== user.userId && !following.includes(Number(id)) ? (
+          <FollowButton onClick={followUser} ref={followButton}>
             <p>Follow</p>
           </FollowButton>
+        ) : Number(id) !== user.userId && following.includes(Number(id)) ? (
+          <UnFollowButton onClick={unFollowUser} ref={unfollowButton}>
+            <p>Unfollow</p>
+          </UnFollowButton>
+        ) : (
+          ""
         )}
         <TrendingTags />
       </SideBarContainer>
