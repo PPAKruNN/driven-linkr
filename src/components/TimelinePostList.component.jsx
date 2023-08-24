@@ -4,13 +4,15 @@ import useAuth from "../hooks/useAuth";
 import axios from "axios";
 import loadingImage from "../assets/images/icons/loadingImage.gif";
 import { styled } from "styled-components";
+import dayjs from 'dayjs';
+import useInterval from 'use-interval'
+import { LoadMore } from "./Post.Components/LoadMore";
 
 export default function TimelinePosts() {
 
   const API_URL = process.env.REACT_APP_API_URL;
   const { token } = useAuth();
   const config = { headers: { Authorization: `Bearer ${token}` } };
-
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -19,6 +21,9 @@ export default function TimelinePosts() {
   const [sharing, setSharing] = useState(false);
   const [repostCount, setRepostCount] = useState({});
   const [selectedPostId, setSelectedPostId] = useState(null);
+  const [lastTime, setLastTime] = useState(dayjs().format('YYYY-MM-DD HH:mm:ss'));
+  const [displayLoadMore, setDisplayLoadMore] = useState('none');
+  const [amountNewPosts, setAmountNewPosts] = useState(0);
 
 
   //CARREGAR POSTS
@@ -98,6 +103,24 @@ export default function TimelinePosts() {
       }
     }, [config, selectedPostId]);
 
+  //VERIFICAR NOVOS POSTS
+
+    const vefifyNewPosts = ()=>{
+      alert('oi')
+      axios.get(`${API_URL}/posts/new-posts?recentUpdate=${lastTime}`)
+        .then(res=>{
+          console.log('aqui é a quantidade de novos posts')
+          console.log(res.data)
+          if(res.data>0){
+            setAmountNewPosts(res.data);
+            setDisplayLoadMore('flex')
+          }else{
+            setDisplayLoadMore('none')
+          }
+
+        }).catch(err=>console.log(err));
+    }
+    useInterval(()=>vefifyNewPosts, 15000);
 
   return (
     <Container>
@@ -109,7 +132,13 @@ export default function TimelinePosts() {
       ) : emptyPage ? (
         <p data-test="message">There are no posts yet</p>
       ) :  (
-        posts.map((post) => <TimelinePostItem data-test="post" key={post.id} post={post} />)
+        <>
+          <LoadMore 
+                displayLoadMore={displayLoadMore}
+                amountNewPosts={amountNewPosts}
+          />
+          {posts.map((post) => <TimelinePostItem data-test="post" key={post.id} post={post} />)}        
+        </>
       )}
     </Container>
   );
