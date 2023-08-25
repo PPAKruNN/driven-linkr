@@ -33,8 +33,8 @@ export default function TimelinePosts() {
       .get(`${API_URL}/posts`, config)
       .then((res) => {
         console.log(res.data)
-        if (Array.isArray(res.data)) {
-          setPosts(res.data);
+        if (Array.isArray(res.data.posts)) {
+          setPosts(res.data.posts);
           setLoading(false);
         } else {
           console.error(res.data);
