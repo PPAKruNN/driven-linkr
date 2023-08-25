@@ -18,8 +18,7 @@ function HashtagPosts({ tagName }) {
     axios
       .get(`${API_URL}/hashtag/${tagName}`, config)
       .then((res) => {
-        console.log(res.data);
-
+        console.log(res.data[0]);
         setPosts(res.data);
         setLoading(false);
       })

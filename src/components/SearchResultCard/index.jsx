@@ -7,7 +7,7 @@ export default function SearchResultCard({ id, profileUrl, userName }) {
   function handleClick() {
     navigate(`/user/${id}`);
   }
-
+  
   return (
     <SearchResultCardWrapper>
       <img src={profileUrl} alt="profile picture" />

@@ -28,7 +28,6 @@ const SearchResultCardWrapper = styled.div`
     height: 39px;
     border-radius: 50%;
   }
-
   h1 {
     &:hover {
       cursor: pointer;
@@ -43,6 +42,26 @@ const SearchResultCardWrapper = styled.div`
   }
 
   @media (max-width: 480px) {
+  }
+ `;
+
+const SearchResultCardLink = styled(Link)`
+  text-decoration: none;
+  display: flex;
+  gap: 7px;
+  &:hover {
+    cursor: pointer;
+    color: #63edff;
+  }
+  color: #515151;
+  font-family: Lato;
+  font-size: 19px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+
+  span {
+    color: #C5C5C5;
   }
 `;
 

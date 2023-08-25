@@ -4,11 +4,10 @@ import useAuth from "../hooks/useAuth";
 import axios from "axios";
 import loadingImage from "../assets/images/icons/loadingImage.gif";
 import { styled } from "styled-components";
+import useUserContext from "../hooks/useUserContext";
 import InfiniteScroll from 'react-infinite-scroller';
 
-
 export default function TimelinePosts() {
-
   const API_URL = process.env.REACT_APP_API_URL;
   const { token } = useAuth();
   const config = { headers: { Authorization: `Bearer ${token}` } };
@@ -17,18 +16,21 @@ export default function TimelinePosts() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [emptyPage, setEmptyPage] = useState(false);
+  const { following } = useUserContext();
   const [hasMore, setHasMore] = useState(true);
   const [currentPage, setCurrentPage] = useState(0);
-
 
   //CARREGAR POSTS
   useEffect(() => {
     axios
       .get(`${API_URL}/posts`, config)
       .then((res) => {
-        console.log(res.data)
-        if (Array.isArray(res.data.posts)) {
-          setPosts(res.data.posts);
+        console.log(res.data);
+        if (Array.isArray(res.data)) {
+          const followingResults = res.data.filter((post) =>
+            following.includes(post.author)
+          );
+          setPosts(followingResults);
           setLoading(false);
         } else {
           console.error(res.data);
@@ -46,7 +48,7 @@ export default function TimelinePosts() {
           "An error occurred while trying to fetch the posts, please refresh the page"
         );
       });
-
+    
   }, [currentPage]);
   
 const loadFunc = () => {
@@ -66,8 +68,6 @@ const loadFunc = () => {
     });
 };
 
-
-
   return (
     <Container>
       {loading ? (
@@ -77,7 +77,11 @@ const loadFunc = () => {
           the page </p>
       ) : emptyPage ? (
         <p data-test="message">There are no posts yet</p>
-      ) : (
+      ) : following.length === 0 ? (
+        <p data-test="message">You don't follow anyone yet. Search for new friends!</p>
+      ) : posts.length === 0 ? (
+        <p data-test="message">No posts found from your friends</p>
+    ) : (
         <InfiniteScroll
           pageStart={0} //valor default  de pagina inicial mas não ta sendo exibido pagina
           loadMore={loadFunc}//aquii é uma func que vai ser chamada sempre que o scroll chegar ao final
@@ -86,7 +90,6 @@ const loadFunc = () => {
         >
           {posts.map((post) => <TimelinePostItem data-test="post" key={post.id} post={post} />)}
         </InfiniteScroll>
-
       )}
     </Container>
   );
@@ -108,5 +111,3 @@ const Image = styled.img`
   width: 10vw;
   height: 10vh;
 `
-
-

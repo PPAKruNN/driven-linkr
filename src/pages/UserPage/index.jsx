@@ -8,7 +8,7 @@ import {
   FollowButton,
   UnFollowButton,
 } from "./styled.js";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useFormAction } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import api from "../../services/api";
 import TimelinePostItem from "../../components/TimelinePostItem.component";
@@ -70,6 +70,9 @@ export default function UserPage() {
       })
       .catch((err) => {
         console.error(err.response.data);
+        alert(
+          "An error occurred while trying to follow this user, please try again later"
+        );
       });
   }
 
@@ -86,6 +89,9 @@ export default function UserPage() {
       })
       .catch((err) => {
         console.error(err.response.data);
+        alert(
+          "An error occurred while trying to unfollow this user, please try again later"
+        );
       });
   }
 
@@ -118,7 +124,7 @@ export default function UserPage() {
             )}
           </div>
         </PostsHeaderContainer>
-        {posts.length > 0 ? (
+        {posts[0].description ? (
           posts.map((post) =>
             post.link ? (
               <TimelinePostItem data-test="post" key={post.id} post={post} />
@@ -127,7 +133,7 @@ export default function UserPage() {
             )
           )
         ) : (
-          <h1>This user has no posts yet</h1>
+          <h1>This user hasn't posted anything yet.</h1>
         )}
       </PostsContainer>
       <SideBarContainer>
