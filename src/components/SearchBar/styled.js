@@ -15,35 +15,28 @@ const SearchBarWrapper = styled.div`
   align-items: center;
   border-radius: 8px;
   background: #fff;
+  max-width: 563px;
+  width: 50vw;
 
   .search-input {
-
-    width: 553px;
     height: 20px;
-
     border-radius: 8px;
-    background: #fff;
 
     font-family: Lato;
     font-size: 19px;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
-   
-    @media screen and (max-width: 768px) {
-      width: 250px;
-    }
+
     &::placeholder {
       color: #c6c6c6;
     }
   }
 
   img {
-
     padding-top: 5px;
     padding-right: 11px;
     cursor: pointer;
-
   }
 `;
 
@@ -54,10 +47,11 @@ const SearchResultsWrapper = styled.div`
   background: #e7e7e7;
   padding-bottom: 10px;
   position: absolute;
-  width: 630px;
-  top: 50px;
+  top: 40px;
   z-index: -1;
   padding-top: 20px;
+  max-width: 563px;
+  width: 50vw;
 `;
 
 export { ComponentContainer, SearchBarWrapper, SearchResultsWrapper };
