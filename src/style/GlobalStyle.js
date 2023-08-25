@@ -20,7 +20,6 @@ input::-webkit-input-placeholder {
         color: #fff;
         cursor: pointer;
         width: 100%;
-        padding: 12px;
     }
 
     h1 {
@@ -38,7 +37,6 @@ input::-webkit-input-placeholder {
         border: none;
         padding: 15px;
         margin: 1px;
-  
     }
 
     form {

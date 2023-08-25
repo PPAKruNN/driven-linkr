@@ -8,19 +8,23 @@ import { useNavigate } from "react-router-dom";
 import userIcon from "../assets/images/icons/userIcon.jpeg";
 import { Link } from "react-router-dom";
 import reactStringReplace from "react-string-replace";
+import useAuth from "../hooks/useAuth";
+import axios from "axios";
 
   
 
 export default function TimelinePostItem({ post }) {
-  const {description, userName, profileUrl, id} = post;
+  const {description, userName, profileUrl, id, author} = post;
 
   const textRef = useRef(null);
   const [isLiked, setIsLiked] = useState(post.liked);
   const [toggle, setToggle] = useState(false);
   const [editing, setEditing] = useState(false);
   const [textValue, setTextValue] = useState(description);
+  const { token, auth } = useAuth();
+  const config = { headers: { Authorization: `Bearer ${token}` } };
+
   const handleEditClick = () => {
-      setEditing(!editing);
   };
   const navigate = useNavigate();
 
@@ -33,7 +37,7 @@ export default function TimelinePostItem({ post }) {
   };
 
   function handleClick() {
-    navigate(`/user/${post.userId}`);
+    navigate(`/user/${author}`);
   }
 
   const convertHashtagsToLinks = (text) => {
@@ -116,7 +120,13 @@ const TimelinePost = styled.div`
   background-color: #171717;
   padding: 10px;
   margin-bottom: 20px;
-  //border: 1px solid red;
+
+  @media screen and (min-width: 480px) {
+    flex-direction: row;
+  }
+  @media screen and (max-width: 480px) {
+    width: 375px;
+  }
 `;
 
 const TimeLinePostLeft = styled.div`
@@ -128,32 +138,33 @@ const TimeLinePostLeft = styled.div`
 `;
 
 const TimeLinePostRight = styled.div`
-  width: 90%;
+  width: 80%;
   display: flex;
   flex-direction: column;
   padding: 10px;
   position: relative;
   h2 {
-    line-height: 1.1em;
-    font-size: 26px;
-    font-weight: 500;
+    color: #FFFFFF;
+    line-height: 23px;
+    font-size: 19px;
+    font-weight: 700;
+    margin-bottom: 12px;
     &:hover {
       cursor: pointer;
     }
   }
   p {
-    font-size: 12px;
-    margin-top: 12px;
+    font-size: 17px;
     margin-bottom: 12px;
-    font-size: 20px;
-    color: #b7b7b7;
+    color: #B7B7B7;
+    font-weight: 700;
+    word-wrap: break-word;
   }
   .description {
     background-color: white;
     border-radius: 12px;
     height: 10%;
     width: 96.6%;
-
     margin: 6% 0;
   }
 `;

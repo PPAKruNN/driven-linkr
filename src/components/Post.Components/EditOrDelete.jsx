@@ -5,7 +5,7 @@ import {PiPencilBold} from 'react-icons/pi';
 
 export function EditOrDelete(props){
     const{toggle, setToggle, handleEditClick, id} = props;
-
+    
 
     return(
         <CsEditOrDelete>
