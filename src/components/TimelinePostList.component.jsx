@@ -1,16 +1,20 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState} from "react";
 import TimelinePostItem from "./TimelinePostItem.component";
 import useAuth from "../hooks/useAuth";
 import axios from "axios";
 import loadingImage from "../assets/images/icons/loadingImage.gif";
 import { styled } from "styled-components";
+import dayjs from 'dayjs';
+import useInterval from 'use-interval'
+import { LoadMore } from "./Post.Components/LoadMore";
+import useUserContext from "../hooks/useUserContext";
+import InfiniteScroll from 'react-infinite-scroller';
+
 
 export default function TimelinePosts() {
-
   const API_URL = process.env.REACT_APP_API_URL;
   const { token } = useAuth();
   const config = { headers: { Authorization: `Bearer ${token}` } };
-
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -19,17 +23,24 @@ export default function TimelinePosts() {
   const [sharing, setSharing] = useState(false);
   const [repostCount, setRepostCount] = useState({});
   const [selectedPostId, setSelectedPostId] = useState(null);
-
+  const [lastTime, setLastTime] = useState(dayjs().format('YYYY-MM-DD HH:mm:ss'));
+  const [displayLoadMore, setDisplayLoadMore] = useState(false);
+  const [amountNewPosts, setAmountNewPosts] = useState(0);
+  const { following } = useUserContext();
+  const [hasMore, setHasMore] = useState(true);
+  const [currentPage, setCurrentPage] = useState(0);
 
   //CARREGAR POSTS
   useEffect(() => {
-    console.log(token);
     axios
       .get(`${API_URL}/posts`, config)
       .then((res) => {
-        console.log(res.data)
+        console.log(res.data.posts);
         if (Array.isArray(res.data.posts)) {
-          setPosts(res.data.posts);
+          const followingResults = res.data.posts.filter((post) =>
+            following.includes(post.author)
+          );
+          setPosts(followingResults);
           setLoading(false);
         } else {
           console.error(res.data);
@@ -41,75 +52,74 @@ export default function TimelinePosts() {
         }
       })
       .catch((err) => {
-        console.error(err);
         setError(true);
         setLoading(false);
         alert(
           "An error occurred while trying to fetch the posts, please refresh the page"
         );
       });
-  }, []);
-
-
-  // BUSCAR REPOSTS
-  const getRepost = useCallback(async () => {
-    try {
-      const result = await axios.get(`${API_URL}/posts/repost`, config);
-      const reposts = result.data;
-
-      const countRepost = {};
-      reposts.forEach((repost) => {
-        const { postId, reposts } = repost;
-        countRepost[postId] = reposts;
-      });
-
-      setRepostCount(countRepost);
-    } catch (error) {
-      console.error(error);
-      alert("An error occurred while fetching repost counts");
-    }
-  }, [config]);
-
-
-  //REPOSTAR
-    const postRepost = useCallback(async () => {
-      setSharing(true);
+    
+  }, [currentPage]);
+ 
   
-      try {
-        await axios.post(
-          `${API_URL}/posts/${selectedPostId}/repost`,
-          {},
-          config
-        );
-  
-        setRepostCount((prevRepostCount) => ({
-          ...prevRepostCount,
-          [selectedPostId]: (prevRepostCount[selectedPostId] || 0) + 1,
-        }));
-  
-        setShowRepost(false);
-      } 
-      catch (error) {
-        console.error(error);
-        alert("An error occurred while reposting the post");
-      } 
-      finally {
-        setSharing(false);
+const loadFunc = () => {
+  axios
+    .get(`${API_URL}/posts?offset=${currentPage + 10}`, config)
+    .then((res) => {
+      const newPosts = posts.concat(res.data.posts);
+      if (newPosts.length > 0) {
+        setPosts(newPosts);
+        setCurrentPage(currentPage + 10);
+      } else {
+        setHasMore(false);
       }
     }, [config, selectedPostId]);
+  }
 
+  useInterval( () => {
+    axios.get(`${API_URL}/posts/new-posts?recentUpdate=${lastTime}`)
+      .then(res=>{
+        console.log('aqui é a quantidade de novos posts')
+        console.log(res.data)
+        if(res.data>0){
+          setAmountNewPosts(res.data);
+          setDisplayLoadMore(true)
+        }else{
+          setDisplayLoadMore(false)
+        }
 
+      }).catch(err=>console.log(err));
+  }, 15000)
+  
   return (
     <Container>
       {loading ? (
-         <Image src={loadingImage} alt="Loading..." />
+        <Image src={loadingImage} alt="Loading..." />
       ) : error ? (
         <p> An error occurred while trying to fetch the posts, please refresh
-        the page </p>
+          the page </p>
       ) : emptyPage ? (
-        <p data-test="message">There are no posts yet</p>
-      ) :  (
-        posts.map((post) => <TimelinePostItem data-test="post" key={post.id} post={post} />)
+        <></>
+      ) : (
+        <LoadMore 
+              displayLoadMore={displayLoadMore}
+              amountNewPosts={amountNewPosts}
+        />
+      )}
+      
+      {following.length === 0 ? (
+        <p data-test="message">You don't follow anyone yet. Search for new friends!</p>
+      ) : posts.length === 0 ? (
+        <p data-test="message">No posts found from your friends</p>
+    ) : (
+        <InfiniteScroll
+          pageStart={0} //valor default de pagina inicial mas não ta sendo exibido pagina
+          loadMore={loadFunc} //aquii é uma func que vai ser chamada sempre que o scroll chegar ao final
+          hasMore={hasMore} //se isso for false ele não chama a func msm que o scroll chegue ao final
+          loader={<div className="loader" key={0}>Loading ...</div>} //teta de load que vai ser ser exibida enquanto não renderiza os componentes
+        >
+          {posts.map((post) => <TimelinePostItem data-test="post" key={post.id} post={post} />)}
+        </InfiniteScroll>
       )}
     </Container>
   );
@@ -118,16 +128,18 @@ export default function TimelinePosts() {
 const Container = styled.div`
   display: flex;
   flex-direction: column;
+  
   gap: 64px;
+  align-items: center;
   
   p {
-    font-size: 25px;
-  }
+    font-size: 16px;
+    color: white;
+  }  
 `
 
 const Image = styled.img`
-  width: 20vw;
-  height: 20vh;
+  margin-top: 100px;
+  width: 10vw;
+  height: 10vh;
 `
-
-

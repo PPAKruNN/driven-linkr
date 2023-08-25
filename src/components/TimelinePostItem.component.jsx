@@ -1,9 +1,12 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useCallback } from "react";
 import { styled } from "styled-components";
 import LinkPost from "./LinkPost.component";
 import { LikeComponent } from "./Post.Components/Like.component";
 import { EditOrDelete } from "./Post.Components/EditOrDelete";
 import { useNavigate } from "react-router-dom";
+import DeletePost from "./Delete-Edit-Post.component";
+import RepostModal from "../components/Post.Components/ModalRepost";
+import { BiRepost } from "react-icons/bi";
 
 import userIcon from "../assets/images/icons/userIcon.jpeg";
 import { IoChatbubblesOutline } from "react-icons/io5";
@@ -20,12 +23,16 @@ import useUserContext from "../hooks/useUserContext";
 
 export default function TimelinePostItem({ post }) {
   const {description, userName, profileUrl, id, author, CommentCount} = post;
+  const API_URL = process.env.REACT_APP_API_URL;
 
   const textRef = useRef(null);
   const [isLiked, setIsLiked] = useState(post.liked);
-  const [toggle, setToggle] = useState(false);
   const [editing, setEditing] = useState(false);
   const [textValue, setTextValue] = useState(description);
+  const [showRepost, setShowRepost] = useState(false);
+  const [sharing, setSharing] = useState(false);
+  const [repostCount, setRepostCount] = useState({});
+  const descriptionConvertedHashtags = convertHashtagsToLinks(textValue);
   const { token, auth } = useAuth();
   const [comments, setComments] = useState([]);
   const config = { headers: { Authorization: `Bearer ${token}` } };
@@ -83,74 +90,128 @@ export default function TimelinePostItem({ post }) {
 
   } 
 
-  const descriptionConvertedHashtags = convertHashtagsToLinks(textValue);
+    // BUSCAR REPOSTS
+    const getRepost = useCallback(async () => {
+      try {
+        const result = await axios.get(`${API_URL}/posts/repost`, config);
+        const reposts = result.data;
+  
+        const countRepost = {};
+        reposts.forEach((repost) => {
+          const { id, reposts } = repost;
+          countRepost[id] = reposts;
+        });
+  
+        setRepostCount(countRepost);
+      } catch (error) {
+        console.error(error);
+        alert("An error occurred while fetching repost counts");
+      }
+    }, [config]);
+  
+  
+    //REPOSTAR
+      const postRepost = useCallback(async () => {
+        setSharing(true);
+    
+        try {
+          await axios.post(
+            `${API_URL}/posts/${id}/repost`,
+            {},
+            config
+          );
+    
+          setRepostCount((prevRepostCount) => ({
+            ...prevRepostCount,
+            [id]: (prevRepostCount[id] || 0) + 1,
+          }));
+    
+          setShowRepost(false);
+        } 
+        catch (error) {
+          console.error(error);
+          alert("An error occurred while reposting the post");
+        } 
+        finally {
+          setSharing(false);
+        }
+      }, [config, id]);
+
 
   return (
     <Post>
-      <TimelinePost>
-        <TimeLinePostLeft>
-          <AuthorImage src={!profileUrl ? userIcon : profileUrl} />
+        <TimelinePost>
+          <TimeLinePostLeft>
+            <AuthorImage src={!profileUrl ? userIcon : profileUrl} />
 
-          <LikeComponent
-              idPost={id}
-              isLiked={isLiked}
-              setIsLiked={setIsLiked}
-              likeCount={post.LikeCount}
-          />
+            < LikeComponent
+                idPost={id}
+                isLiked={isLiked}
+                setIsLiked={setIsLiked}
+                likeCount={post.LikeCount}
+            />
 
-          <div onClick={loadComments}>
-            <IoChatbubblesOutline/>          
-            <p>{CommentCount} {CommentCount === 1 ? "comment" : "comments"}</p>
-          </div> 
+            {repostCount[id] > 0 && (
+              <>
+                   <ContainerRepostBy>
+                      <p>
+                        <BiRepost className="repost-icon"/>Re-post by&nbsp;
+                        <span className="username">{userName}</span>
+                      </p>
+                    </ContainerRepostBy>
 
-        </TimeLinePostLeft>
-
-        <TimeLinePostRight>
-          <EditOrDelete
-              id={id}
-              textRef={textRef}
-              toggle={toggle}
-              setToggle={setToggle}
-              handleEditClick={handleEditClick}
-          />
-
-          <h2 onClick={handleClick} data-test="username">
-            {userName}
-          </h2>
-
-          {editing ? (
-                <>
-                  <textarea
-                      ref={textRef} 
-                      defaultValue={textValue}
-                      className="description" 
-                      onKeyDown={(e) => handleKey(e)}            
-                      style={{
-                            fontFamily: "Arial, sans-serif",
-                            fontSize: "14px",
-                            padding: "10px",
-                            border: "1px solid #ccc",
-                            borderRadius: "4px",
-                            width: "100%",
-                            height: "100%"
-                      }}
+                    <RepostModal
+                      show={showRepost}
+                      onClose={() => setShowRepost(false)}
+                      onConfirm={postRepost}
+                      sharing={sharing}
                     />
-                  </>
-              ) : (<>
-                <p data-test="description">{convertHashtagsToLinks(textValue)}</p></>
-              )}
+              </>
+            )} 
 
-          <LinkPost metadata={post.metadata} link={post.link}/>
-        </TimeLinePostRight>
-      </TimelinePost>
-      {comments.length !== 0 ? 
-      (<CommentSection>
-        {comments}
-        <CommentInput profileUrl={""} submitCallback={submitComment}/>
-      </CommentSection>)
-      :
-      <></>
-      }
+          </TimeLinePostLeft>
+
+          <TimeLinePostRight>
+            <DeletePost post={post}
+            />
+
+            <h2 onClick={handleClick} data-test="username">
+              {userName}
+            </h2>
+
+            {editing ? (
+                  <>
+                    <textarea
+                        ref={textRef} 
+                        defaultValue={textValue}
+                        className="description" 
+                        onKeyDown={(e) => handleKey(e)}            
+                        style={{
+                              fontFamily: "Arial, sans-serif",
+                              fontSize: "14px",
+                              padding: "10px",
+                              border: "1px solid #ccc",
+                              borderRadius: "4px",
+                              width: "100%",
+                              height: "100%"
+                        }}
+                      />
+                    </>
+                ) : (<>
+                  <p data-test="description">{convertHashtagsToLinks(textValue)}</p></>
+                )}
+
+            <LinkPost metadata={post.metadata} link={post.link}/>
+          </TimeLinePostRight>
+        </TimelinePost>
+        {comments.length !== 0 ? 
+        (<CommentSection>
+          {comments}
+          <CommentInput profileUrl={""} submitCallback={submitComment}/>
+        </CommentSection>)
+        :
+        <></>
+        }
     </Post>
   );
 }
@@ -196,9 +257,18 @@ const TimelinePost = styled.div`
   flex-direction: row;
   border-radius: 16px;
   background-color: #171717;
+  padding: 10px;
+  margin-bottom: 20px;
 
-  padding: 12px;
-
+  @media screen and (min-width: 480px) {
+    flex-direction: row;
+  }
+  @media screen and (max-width: 480px) {
+    min-width: 375px;
+    border-radius: 0;
+    width: 100%;
+    padding: 0;
+  }
 `;
 
 const TimeLinePostLeft = styled.div`
@@ -236,31 +306,36 @@ const TimeLinePostLeft = styled.div`
 const TimeLinePostRight = styled.div`
   width: 90%;
   height: 100%;
+  width: 80%;
   display: flex;
   flex-direction: column;
   padding: 10px;
   position: relative;
+  @media screen and (max-width: 480px) {
+    width: 100%;
+  }
   h2 {
-    line-height: 1.1em;
-    font-size: 26px;
-    font-weight: 500;
+    color: #FFFFFF;
+    line-height: 23px;
+    font-size: 19px;
+    font-weight: 700;
+    margin-bottom: 12px;
     &:hover {
       cursor: pointer;
     }
   }
   p {
-    font-size: 12px;
-    margin-top: 12px;
+    font-size: 17px;
     margin-bottom: 12px;
-    font-size: 20px;
-    color: #b7b7b7;
+    color: #B7B7B7;
+    font-weight: 700;
+    word-wrap: break-word;
   }
   .description {
     background-color: white;
     border-radius: 12px;
     height: 10%;
     width: 96.6%;
-
     margin: 6% 0;
   }
 `;
@@ -275,4 +350,32 @@ const AuthorImage = styled.img`
 const StyledLink = styled(Link)`
   font-weight: 700;
   cursor: pointer;
+`;
+
+const ContainerRepostBy = styled.div`
+  background-color: #1e1e1e;
+  width: 100%;
+  height: 20px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  flex-shrink: 0;
+
+  p {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+  }
+
+  .repost-icon {
+    margin-right: 5px;
+    font-size: 20px;
+    font-weight: bold;
+  }
+
+  .username {
+    font-weight: bold; 
+  }
 `;
