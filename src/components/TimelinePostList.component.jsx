@@ -89,12 +89,7 @@ const loadFunc = () => {
             }
   
           }).catch(err=>console.log(err));
-      }, 15000);
-=======
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+      }, 15000)
 };
 
   return (
@@ -111,9 +106,9 @@ const loadFunc = () => {
               displayLoadMore={displayLoadMore}
               amountNewPosts={amountNewPosts}
         />
-      ) 
+      )}
       
-        following.length === 0 ? (
+      {following.length === 0 ? (
         <p data-test="message">You don't follow anyone yet. Search for new friends!</p>
       ) : posts.length === 0 ? (
         <p data-test="message">No posts found from your friends</p>
