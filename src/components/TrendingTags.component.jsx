@@ -7,13 +7,10 @@ import { useNavigate } from "react-router-dom";
 function TrendingTags() {
   const navigate = useNavigate();
 
-  
   const API_URL = process.env.REACT_APP_API_URL;
   const { auth, token } = useAuth();
   const config = { headers: { Authorization: `Bearer ${token}` } };
   const [trendingTags, setTrendingTags] = useState([]);
-
-
 
   useEffect(() => {
     axios
@@ -31,7 +28,7 @@ function TrendingTags() {
   }, []);
 
   const handleTagClick = (tagName) => {
-    navigate(`/hashtag/${tagName.replace(/^#/, '')}`);
+    navigate(`/hashtag/${tagName.replace(/^#/, "")}`);
   };
 
   return (
@@ -40,7 +37,11 @@ function TrendingTags() {
       <HorizontalLine />
       <TrendingTagsContainer>
         {trendingTags.map((tag, index) => (
-          <Tag data-test="hashtag" key={index} onClick={() => handleTagClick(tag)}>
+          <Tag
+            data-test="hashtag"
+            key={index}
+            onClick={() => handleTagClick(tag)}
+          >
             {tag}
           </Tag>
         ))}
@@ -68,7 +69,7 @@ const TrendingTagsContainer = styled.div`
     font-size: 27px;
     margin-left: 8px;
     font-family: "Oswald";
-    margin: 9px 0 0 16px
+    margin: 9px 0 0 16px;
   }
 
   p {

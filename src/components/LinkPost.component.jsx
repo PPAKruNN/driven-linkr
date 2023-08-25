@@ -2,34 +2,31 @@ import React from "react";
 import { styled } from "styled-components";
 import imageLink from "../assets/images/icons/react.png";
 
-function LinkPost({metadata, link}) {
-
+function LinkPost({ metadata, link }) {
   return (
-    <LinkPostContainer 
-    href={link} 
-    data-test="link"
-    target="_blank"
-    rel="noopener noreferrer">
-
+    <LinkPostContainer
+      href={link}
+      data-test="link"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
       <LinkPostContainerLeft>
         <h2>{metadata.title}</h2>
-        <p>
-          {metadata.description}
-        </p>
+        <p>{metadata.description}</p>
         <a href={link}>
           <p>{link}</p>
         </a>
       </LinkPostContainerLeft>
       <LinkPostContainerRight>
         <a href={link}>
-          <LinkPostImage src={!metadata.images ? imageLink : metadata.images[0]} />
+          <LinkPostImage
+            src={!metadata.images ? imageLink : metadata.images[0]}
+          />
         </a>
       </LinkPostContainerRight>
-
     </LinkPostContainer>
-  )
+  );
 }
-
 
 const LinkPostContainer = styled.div`
   font-family: "Lato";
@@ -47,10 +44,11 @@ const LinkPostContainer = styled.div`
     width: 60vw;
     height: auto;
   }
-`
+`;
+
 const LinkPostContainerRight = styled.div`
   width: 30%;
-`
+`;
 
 const LinkPostContainerLeft = styled.div`
   width: 70%;
@@ -59,7 +57,7 @@ const LinkPostContainerLeft = styled.div`
 
   h2 {
     font-size: 16px;
-    line-height 19px;
+    line-height: 19px;
     word-wrap: break-word;
   }
 
@@ -79,7 +77,7 @@ const LinkPostContainerLeft = styled.div`
   @media screen and (max-width: 480px) {
     height: auto;
   }
-`
+`;
 
 const LinkPostImage = styled.img`
   width: 100%;
@@ -93,6 +91,7 @@ const LinkPostImage = styled.img`
     width: 15vw;
     height: 15vh;
   }
-`
+`;
+
 
 export default LinkPost;

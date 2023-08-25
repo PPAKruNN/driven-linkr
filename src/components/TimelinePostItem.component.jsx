@@ -8,19 +8,23 @@ import { useNavigate } from "react-router-dom";
 import userIcon from "../assets/images/icons/userIcon.jpeg";
 import { Link } from "react-router-dom";
 import reactStringReplace from "react-string-replace";
+import useAuth from "../hooks/useAuth";
+import axios from "axios";
 
   
 
 export default function TimelinePostItem({ post }) {
-  const {description, userName, profileUrl, id} = post;
+  const {description, userName, profileUrl, id, author} = post;
 
   const textRef = useRef(null);
   const [isLiked, setIsLiked] = useState(post.liked);
   const [toggle, setToggle] = useState(false);
   const [editing, setEditing] = useState(false);
   const [textValue, setTextValue] = useState(description);
+  const { token, auth } = useAuth();
+  const config = { headers: { Authorization: `Bearer ${token}` } };
+
   const handleEditClick = () => {
-      setEditing(!editing);
   };
   const navigate = useNavigate();
 
@@ -33,7 +37,7 @@ export default function TimelinePostItem({ post }) {
   };
 
   function handleClick() {
-    navigate(`/user/${post.userId}`);
+    navigate(`/user/${author}`);
   }
 
   const convertHashtagsToLinks = (text) => {
