@@ -25,9 +25,9 @@ export default function TimelinePosts() {
     axios
       .get(`${API_URL}/posts`, config)
       .then((res) => {
-        console.log(res.data);
-        if (Array.isArray(res.data)) {
-          const followingResults = res.data.filter((post) =>
+        console.log(res.data.posts);
+        if (Array.isArray(res.data.posts)) {
+          const followingResults = res.data.posts.filter((post) =>
             following.includes(post.author)
           );
           setPosts(followingResults);
