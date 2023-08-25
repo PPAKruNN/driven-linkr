@@ -28,7 +28,6 @@ const SearchResultCardWrapper = styled.div`
     height: 39px;
     border-radius: 50%;
   }
-
   h1 {
     &:hover {
       cursor: pointer;
