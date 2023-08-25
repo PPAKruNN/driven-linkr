@@ -28,6 +28,7 @@ const SideBarContainer = styled.div`
   align-items: start;
   flex-direction: column;
   margin-top: 165px;
+  z-index: 0;
   @media screen and (max-width: 480px) {
     display: none;
   }

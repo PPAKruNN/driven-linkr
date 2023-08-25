@@ -58,6 +58,7 @@ const SideBarContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: start;
+  z-index: 0;
 
   @media screen and (max-width: 480px) {
     flex-direction: row;
