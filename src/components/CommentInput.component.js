@@ -20,7 +20,7 @@ export function CommentInput({profileUrl, submitCallback }) {
 
     return (
         <CommentInputSC onSubmit={submit}>
-          <img alt="User profile" src={!profileUrl ? userIcon : profileUrl} />
+          <img alt="User profile"  src={!profileUrl ? userIcon : profileUrl} />
           <form>
             <input ref={inputRef} placeholder="Insira seu comentário aqui" type="text"></input>
             <IoIosSend onClick={submit}/>   

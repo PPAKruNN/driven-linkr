@@ -14,11 +14,12 @@ import axios from "axios";
 import { Comment } from "./Comment.component";
 import { CommentInput } from "./CommentInput.component";
 import api from "../services/api";
+import useUserContext from "../hooks/useUserContext";
 
   
 
 export default function TimelinePostItem({ post }) {
-  const {description, userName, profileUrl, id, author} = post;
+  const {description, userName, profileUrl, id, author, CommentCount} = post;
 
   const textRef = useRef(null);
   const [isLiked, setIsLiked] = useState(post.liked);
@@ -28,6 +29,7 @@ export default function TimelinePostItem({ post }) {
   const { token, auth } = useAuth();
   const [comments, setComments] = useState([]);
   const config = { headers: { Authorization: `Bearer ${token}` } };
+  const user = useUserContext();
 
   const handleEditClick = () => {
   };
@@ -63,7 +65,7 @@ export default function TimelinePostItem({ post }) {
       const rawData = response.data; 
 
       const comments = rawData.map(
-        (data) => <Comment commentary={data.message} profileUrl={data.profileUrl} userName={data.userName} isAuthor={false} isFollowing={false}/>
+        (data) => <Comment author={author} commentary={data.message} profileUrl={data.profileUrl} userName={data.userName} isAuthor={author === data.author} isFollowing={user.following.includes(data.author)}/>
       )
 
       setComments(comments);
@@ -98,7 +100,7 @@ export default function TimelinePostItem({ post }) {
 
           <div onClick={loadComments}>
             <IoChatbubblesOutline/>          
-            <p>100 comments</p>
+            <p>{CommentCount} {CommentCount === 1 ? "comment" : "comments"}</p>
           </div> 
 
         </TimeLinePostLeft>
@@ -141,10 +143,14 @@ export default function TimelinePostItem({ post }) {
           <LinkPost metadata={post.metadata} link={post.link}/>
         </TimeLinePostRight>
       </TimelinePost>
-      <CommentSection>
+      {comments.length !== 0 ? 
+      (<CommentSection>
         {comments}
         <CommentInput profileUrl={""} submitCallback={submitComment}/>
-      </CommentSection>
+      </CommentSection>)
+      :
+      <></>
+      }
     </Post>
   );
 }
@@ -176,10 +182,7 @@ const CommentSection = styled.section`
     background-color: #353535;
     border: 1px solid #353535;
   }
-
-
 `;
-
 
 const TimelinePost = styled.div`
   box-sizing: border-box;
@@ -205,7 +208,7 @@ const TimeLinePostLeft = styled.div`
   align-items: center;
   padding: 5px;
  
-  div {
+  & > div {
       width: 100%;
       display: flex;
       flex-direction: column;

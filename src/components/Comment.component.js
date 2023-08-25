@@ -1,14 +1,17 @@
 import { styled } from "styled-components";
 import userIcon from "../assets/images/icons/userIcon.jpeg";
+import { useNavigate } from "react-router-dom";
 
-export function Comment({profileUrl, userName, commentary, isAuthor, isFollowing}) {
+export function Comment({profileUrl, userName, commentary, author, isAuthor, isFollowing}) {
+
+    const navigate = useNavigate();
 
     return (
         <CommentSC>
-          <img alt="User profile" src={!profileUrl ? userIcon : profileUrl} />
+          <img onClick={() => navigate(`/user/${author}`)} alt="User profile" src={!profileUrl ? userIcon : profileUrl} />
           <div>
               <span>
-                <h1>{userName}</h1>
+                <h1 onClick={() => navigate(`/user/${author}`)} >{userName}</h1>
                 <h2>{isAuthor ? "• post's author" : isFollowing ? "• following" : ""} </h2>
               </span>
               <p>{commentary}</p>
