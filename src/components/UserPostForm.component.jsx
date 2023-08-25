@@ -16,7 +16,7 @@ export default function PostForm() {
   const [publishing, setPublishing] = useState(false);
 
   function handlePost(e) {
-    if (!url) {
+    if (url === "") {
       alert("Please, enter the URL of your post!");
     } else {
       setPublishing(true);
