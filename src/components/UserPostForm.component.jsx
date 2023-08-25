@@ -4,7 +4,6 @@ import axios from "axios";
 import useAuth from "../hooks/useAuth";
 import userIcon from "../assets/images/icons/userIcon.jpeg";
 
-
 export default function PostForm() {
   const API_URL = process.env.REACT_APP_API_URL;
 
@@ -16,9 +15,7 @@ export default function PostForm() {
   const [description, setDescription] = useState("");
   const [publishing, setPublishing] = useState(false);
 
-
   function handlePost(e) {
-    
     if (!url) {
       alert("Please, enter the URL of your post!");
     } else {
@@ -29,7 +26,7 @@ export default function PostForm() {
           {
             link: url,
             description: description,
-            author: auth.userId
+            author: auth.userId,
           },
           config
         )
@@ -39,7 +36,7 @@ export default function PostForm() {
           window.location.reload();
         })
         .catch((error) => {
-          console.log(error)
+          console.log(error);
           alert("There was an error publishing your link.");
         })
         .finally(() => {
@@ -104,6 +101,11 @@ const PostContainer = styled.div`
   background-color: white;
   padding: 10px;
   margin-bottom: 30px;
+
+  @media (max-width: 480px) {
+    border-radius: 0;
+    padding: 0;
+  }
 `;
 
 const ImageBox = styled.div`
@@ -138,6 +140,9 @@ const PublishBox = styled.div`
     color: #707070;
     line-height: 24px;
     margin-bottom: 15px;
+    @media screen and (max-width: 480px) {
+      align-self: center;
+    }
   }
 `;
 

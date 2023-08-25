@@ -121,7 +121,10 @@ const TimelinePost = styled.div`
     flex-direction: row;
   }
   @media screen and (max-width: 480px) {
-    width: 375px;
+    min-width: 375px;
+    border-radius: 0;
+    width: 100%;
+    padding: 0;
   }
 `;
 
@@ -139,6 +142,9 @@ const TimeLinePostRight = styled.div`
   flex-direction: column;
   padding: 10px;
   position: relative;
+  @media screen and (max-width: 480px) {
+    width: 100%;
+  }
   h2 {
     color: #FFFFFF;
     line-height: 23px;
