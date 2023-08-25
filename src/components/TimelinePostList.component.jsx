@@ -36,13 +36,9 @@ export default function TimelinePosts() {
       .then((res) => {
         console.log(res.data.posts);
         if (Array.isArray(res.data.posts)) {
-          const followingResults = res.data.posts.filter((post) =>
-            following.includes(post.author)
-          );
           setPosts(res.data.posts);
           setLoading(false);
         } else {
-          console.error(res.data);
           setError(true);
           setLoading(false);
           alert(
