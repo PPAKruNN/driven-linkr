@@ -68,8 +68,9 @@ export default function TimelinePostItem({ post }) {
       </TimeLinePostLeft>
 
       <TimeLinePostRight>
-        <DeletePost post={post}
-        />
+        <DeletePost 
+        post={post}
+        toggle/>
 
         <h2 onClick={handleClick} data-test="username">
           {userName}

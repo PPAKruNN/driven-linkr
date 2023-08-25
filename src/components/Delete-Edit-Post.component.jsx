@@ -4,6 +4,7 @@ import {PiPencilBold} from 'react-icons/pi';
 import { useState, useCallback, useEffect, useRef} from "react";
 import useAuth from "../hooks/useAuth";
 import axios from "axios";
+import { ConfirmDelete } from "./Post.Components/ConfirmDelete";
 
 
 export default function DeletePost({ post }){
@@ -80,7 +81,6 @@ export default function DeletePost({ post }){
       // DELETAR POSTS
       const deletePostPage = useCallback(async () => {
         setDeleting(true);
-
         try {
           await axios.delete(
             `${API_URL}/posts/${id}`,
@@ -97,6 +97,9 @@ export default function DeletePost({ post }){
         // eslint-disable-next-line
       }, []);
 
+      const togle = ()=>{
+        setShowDeleteModal(true)
+      }
 
     return(
         <CsEditOrDelete>
@@ -110,11 +113,14 @@ export default function DeletePost({ post }){
                  <TbTrashFilled 
                  data-test="delete-btn" 
                  show={showDeleteModal}
-                 onClick={deletePostPage}
-                 onConfirm={deletePostPage}
-                 onClose={() => setShowDeleteModal(false)}
+                 onClick={togle}
                  deleting={deleting}/>
             </div>
+            <ConfirmDelete
+            showDeleteModal={showDeleteModal}
+            deletePostPage={deletePostPage}
+            setShowDeleteModal={setShowDeleteModal}
+            />
         </CsEditOrDelete>
     );
 }
@@ -139,8 +145,4 @@ const CsEditOrDelete = styled.div`
         height: 23px; 
         cursor: pointer; 
     }
-<<<<<<< HEAD
-
-=======
->>>>>>> main
 `;

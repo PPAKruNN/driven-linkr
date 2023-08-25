@@ -1,34 +1,21 @@
-import { useState } from "react";
 import { styled } from "styled-components";
 import useAuth from "../../hooks/useAuth";
-import axios from "axios";
 
 
 export function ConfirmDelete(props){
-    const{toggle, setToggle, id} = props;
-    const {token, auth} = useAuth();
-    const config = { headers: { Authorization: `Bearer ${token}` } };
-
+    const{showDeleteModal, setShowDeleteModal, deletePostPage} = props;
 
     const handleConfirm = (choice)=>{
         if(choice==='yes'){
-            axios.delete(`${process.env.REACT_APP_API_URL}/posts/${id}`,config)
-            .then(res=>{
-                console.log(res)
-                setToggle(!toggle);
-                window.reload();
-            }).catch(err=>{
-                console.log(err)
-                setToggle(!toggle);
-            })
+            deletePostPage();
         }else{
-            setToggle(!toggle);
+            setShowDeleteModal(!showDeleteModal);
         }       
         
     }
     return(
 
-        <CsConfirmDelete toggle={toggle ? 'true' : 'false'}>
+        <CsConfirmDelete showDeleteModal={showDeleteModal ? 'true' : 'false'}>
             <div className="container">
                 <div className="question">
                     <p>Are you sure you want</p>
@@ -58,7 +45,7 @@ const CsConfirmDelete = styled.div`
     height: 100vh;
     background-color: rgba(255, 255, 255, 0.7);
 
-    display: ${ p=> p.toggle==='true' ?'flex' : 'none'};
+    display: ${ p=> p.showDeleteModal=== 'true' ? 'flex' : 'none'};
     align-items: center;
     justify-content: center;
 
