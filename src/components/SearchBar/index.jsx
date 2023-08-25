@@ -9,11 +9,13 @@ import searchIcon from "../../assets/images/icons/searchIcon.png";
 import SearchResultCard from "../SearchResultCard";
 import api from "../../services/api";
 import useAuth from "../../hooks/useAuth";
+import useUserContext from "../../hooks/useUserContext";
 
 export default function SearchBar() {
   const inputRef = useRef();
   const [searchResults, setSearchResults] = useState([]);
   const { auth } = useAuth() || {};
+  const { following } = useUserContext();
 
   function handleInputChange() {
     if (inputRef.current.state.value.length < 3) {
@@ -26,7 +28,12 @@ export default function SearchBar() {
 
     promise
       .then((res) => {
-        setSearchResults(res.data);
+        const followingResults = res.data.filter((user) => following.includes(user.id));
+        const notFollowingResults = res.data.filter(
+          (user) => !following.includes(user.id)
+        );
+        const sorted = [...followingResults, ...notFollowingResults];
+        setSearchResults(sorted);
       })
       .catch((err) => {
         console.log(err);

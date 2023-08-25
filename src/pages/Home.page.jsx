@@ -26,11 +26,19 @@ export default function Home() {
 }
 
 const HomePageContainer = styled.div`
-  width: 70%;
+  width: 100%;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: center;
   margin-top: 40px;
+
+  @media (max-width: 480px) {
+    width: 100%;
+  }
+
+  @media screen and (min-width: 650px) {
+    width: 60%;
+  }
 `
 
 const SideBarContainer = styled.div`
@@ -39,6 +47,7 @@ const SideBarContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: start;
+  z-index: 0;
 
   @media screen and (max-width: 480px) {
     flex-direction: row;
@@ -58,10 +67,12 @@ const TimelineContainer = styled.div`
   }
 
   @media (max-width: 480px) {
-    width: 98.5vw;
-  }
-
-  @media screen and (min-width: 650px) {
-    width: 45vw;
+    h1{
+      font-weight: 700;
+      font-size: 33px;
+      line-height: 48px;
+      margin-bottom: 30px;
+      margin-top: 50px;
+    }
   }
 `
