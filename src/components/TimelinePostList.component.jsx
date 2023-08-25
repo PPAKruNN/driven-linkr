@@ -63,8 +63,7 @@ export default function TimelinePosts() {
  
   
 const loadFunc = () => {
-  axios
-    .get(`${API_URL}/posts?offset=${currentPage + 10}`, config)
+  axios.get(`${API_URL}/posts?offset=${currentPage + 10}`, config)
     .then((res) => {
       const newPosts = posts.concat(res.data.posts);
       if (newPosts.length > 0) {

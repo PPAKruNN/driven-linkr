@@ -139,6 +139,7 @@ export default function TimelinePostItem({ post }) {
 
 
   return (
+
     <Post>
         <TimelinePost>
           <TimeLinePostLeft>
@@ -172,8 +173,7 @@ export default function TimelinePostItem({ post }) {
           </TimeLinePostLeft>
 
           <TimeLinePostRight>
-            <DeletePost post={post}
-            />
+            <DeletePost post={post}/>
 
             <h2 onClick={handleClick} data-test="username">
               {userName}
