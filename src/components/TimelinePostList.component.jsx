@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState} from "react";
 import TimelinePostItem from "./TimelinePostItem.component";
 import useAuth from "../hooks/useAuth";
 import axios from "axios";
@@ -15,15 +15,10 @@ export default function TimelinePosts() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [emptyPage, setEmptyPage] = useState(false);
-  const [showRepost, setShowRepost] = useState(false);
-  const [sharing, setSharing] = useState(false);
-  const [repostCount, setRepostCount] = useState({});
-  const [selectedPostId, setSelectedPostId] = useState(null);
 
 
   //CARREGAR POSTS
   useEffect(() => {
-    console.log(token);
     axios
       .get(`${API_URL}/posts`, config)
       .then((res) => {
@@ -41,62 +36,14 @@ export default function TimelinePosts() {
         }
       })
       .catch((err) => {
-        console.error(err);
         setError(true);
         setLoading(false);
         alert(
           "An error occurred while trying to fetch the posts, please refresh the page"
         );
       });
+      
   }, []);
-
-
-  // BUSCAR REPOSTS
-  const getRepost = useCallback(async () => {
-    try {
-      const result = await axios.get(`${API_URL}/posts/repost`, config);
-      const reposts = result.data;
-
-      const countRepost = {};
-      reposts.forEach((repost) => {
-        const { postId, reposts } = repost;
-        countRepost[postId] = reposts;
-      });
-
-      setRepostCount(countRepost);
-    } catch (error) {
-      console.error(error);
-      alert("An error occurred while fetching repost counts");
-    }
-  }, [config]);
-
-
-  //REPOSTAR
-    const postRepost = useCallback(async () => {
-      setSharing(true);
-  
-      try {
-        await axios.post(
-          `${API_URL}/posts/${selectedPostId}/repost`,
-          {},
-          config
-        );
-  
-        setRepostCount((prevRepostCount) => ({
-          ...prevRepostCount,
-          [selectedPostId]: (prevRepostCount[selectedPostId] || 0) + 1,
-        }));
-  
-        setShowRepost(false);
-      } 
-      catch (error) {
-        console.error(error);
-        alert("An error occurred while reposting the post");
-      } 
-      finally {
-        setSharing(false);
-      }
-    }, [config, selectedPostId]);
 
 
   return (
@@ -116,15 +63,20 @@ export default function TimelinePosts() {
 }
 
 const Container = styled.div`
-
+  margin-top: 20px;  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   p {
-    font-size: 25px;
-  }
+    font-size: 16px;
+    color: white;
+  }  
 `
 
 const Image = styled.img`
-  width: 20vw;
-  height: 20vh;
+  margin-top: 100px;
+  width: 10vw;
+  height: 10vh;
 `
 
 
