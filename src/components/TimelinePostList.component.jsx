@@ -22,7 +22,7 @@ export default function TimelinePosts() {
   const [repostCount, setRepostCount] = useState({});
   const [selectedPostId, setSelectedPostId] = useState(null);
   const [lastTime, setLastTime] = useState(dayjs().format('YYYY-MM-DD HH:mm:ss'));
-  const [displayLoadMore, setDisplayLoadMore] = useState('none');
+  const [displayLoadMore, setDisplayLoadMore] = useState(false);
   const [amountNewPosts, setAmountNewPosts] = useState(0);
 
 
@@ -104,23 +104,21 @@ export default function TimelinePosts() {
     }, [config, selectedPostId]);
 
   //VERIFICAR NOVOS POSTS
-
-    const vefifyNewPosts = ()=>{
-      alert('oi')
-      axios.get(`${API_URL}/posts/new-posts?recentUpdate=${lastTime}`)
-        .then(res=>{
-          console.log('aqui é a quantidade de novos posts')
-          console.log(res.data)
-          if(res.data>0){
-            setAmountNewPosts(res.data);
-            setDisplayLoadMore('flex')
-          }else{
-            setDisplayLoadMore('none')
-          }
-
-        }).catch(err=>console.log(err));
-    }
-    useInterval(()=>vefifyNewPosts, 15000);
+   
+    useInterval(()=>{
+        axios.get(`${API_URL}/posts/new-posts?recentUpdate=${lastTime}`)
+          .then(res=>{
+            console.log('aqui é a quantidade de novos posts')
+            console.log(res.data)
+            if(res.data>0){
+              setAmountNewPosts(res.data);
+              setDisplayLoadMore(true)
+            }else{
+              setDisplayLoadMore(false)
+            }
+  
+          }).catch(err=>console.log(err));
+      }, 15000);
 
   return (
     <Container>
