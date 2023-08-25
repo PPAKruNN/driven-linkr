@@ -4,6 +4,7 @@ import LinkPost from "./LinkPost.component";
 import { LikeComponent } from "./Post.Components/Like.component";
 import { EditOrDelete } from "./Post.Components/EditOrDelete";
 import { useNavigate } from "react-router-dom";
+import DeletePost from "./Delete-Edit-Post.component";
 
 import userIcon from "../assets/images/icons/userIcon.jpeg";
 import { Link } from "react-router-dom";
@@ -67,12 +68,7 @@ export default function TimelinePostItem({ post }) {
       </TimeLinePostLeft>
 
       <TimeLinePostRight>
-        <EditOrDelete
-            id={id}
-            textRef={textRef}
-            toggle={toggle}
-            setToggle={setToggle}
-            handleEditClick={handleEditClick}
+        <DeletePost post={post}
         />
 
         <h2 onClick={handleClick} data-test="username">
