@@ -30,6 +30,7 @@ export default function TimelinePosts() {
   const [hasMore, setHasMore] = useState(true);
   const [currentPage, setCurrentPage] = useState(0);
 
+	console.log(posts);
   //CARREGAR POSTS
   useEffect(() => {
     axios
