@@ -126,10 +126,12 @@ const loadFunc = () => {
 }
 
 const Container = styled.div`
-  margin-top: 20px;  
   display: flex;
   flex-direction: column;
+  
+  gap: 64px;
   align-items: center;
+  
   p {
     font-size: 16px;
     color: white;
