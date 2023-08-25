@@ -23,11 +23,11 @@ const UserPageContainer = styled.div`
 `;
 
 const SideBarContainer = styled.div`
-  flex: 1;
   margin-left: 40px;
   display: flex;
   align-items: start;
   flex-direction: column;
+  margin-top: 165px;
   @media screen and (max-width: 480px) {
     display: none;
   }
@@ -35,19 +35,30 @@ const SideBarContainer = styled.div`
 
 const PostsContainer = styled.div`
   width: 75%;
-
-  h1 {
-    font-weight: 700;
+  margin-top: 40px;
+  
+  h1,
+  h2 {
+    color: #fff;
+    font-family: Oswald;
     font-size: 43px;
-    line-height: 63px;
-    margin-bottom: 30px;
-    margin-top: 50px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    @media screen and (max-width: 480px) {
+      font-size: 33px;
+    }
+  }
+
+  h2 {
+    @media screen and (max-width: 480px) {
+      margin-left: 17px;
+    }
   }
 
   @media screen and (max-width: 480px) {
     width: 100%;
   }
-
 `;
 
 const PostsHeaderContainer = styled.div`
@@ -55,19 +66,22 @@ const PostsHeaderContainer = styled.div`
   align-items: center;
   justify-content: space-between;
   width: 100vw;
-  max-width: 133%;
+  max-width: 70vw;
   min-width: 375px;
-  background-color: red;
+  height: 64px;
+  margin-bottom: 41px;
+  margin-top: 20px;
 
   @media screen and (max-width: 480px) {
-    min-width: 0;
+    min-width: 100vw;
   }
 
   img {
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    margin-top: 30px;
+    margin-top: 20px;
+    margin-left: 30px;
   }
 
   div {
@@ -85,7 +99,6 @@ const FollowButton = styled.button`
   justify-content: center;
   border-radius: 5px;
   background: #1877f2;
-  margin-top: 85px;
   align-self: end;
   cursor: pointer;
 
@@ -106,6 +119,10 @@ const FollowButton = styled.button`
     font-weight: 700;
     line-height: normal;
   }
+
+  @media screen and (max-width: 480px) {
+    margin-right: 17px;
+  }
 `;
 
 const UnFollowButton = styled.button`
@@ -116,7 +133,6 @@ const UnFollowButton = styled.button`
   justify-content: center;
   border-radius: 5px;
   background: #fff;
-  margin-top: 85px;
   align-self: end;
   cursor: pointer;
 
@@ -136,6 +152,10 @@ const UnFollowButton = styled.button`
     font-style: normal;
     font-weight: 700;
     line-height: normal;
+  }
+
+  @media screen and (max-width: 480px) {
+    margin-right: 17px;
   }
 `;
 

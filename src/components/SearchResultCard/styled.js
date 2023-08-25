@@ -42,6 +42,10 @@ const SearchResultCardWrapper = styled.div`
     line-height: normal;
   }
 
+  span {
+    color: #C5C5C5;
+  }
+
   @media (max-width: 480px) {
   }
 `;
