@@ -6,6 +6,20 @@ const UserPageContainer = styled.div`
   flex-direction: row;
   justify-content: space-between;
   margin-top: 40px;
+
+  @media (max-width: 480px) {
+    width: 100vw;
+    flex-direction: column;
+  }
+
+  .mobile-search-bar {
+    margin-top: 35px;
+    padding: 0 10px;
+
+    @media (min-width: 481px) {
+      display: none;
+    }
+  }
 `;
 
 const SideBarContainer = styled.div`
@@ -29,16 +43,23 @@ const PostsContainer = styled.div`
     margin-bottom: 30px;
     margin-top: 50px;
   }
+
+  @media screen and (max-width: 480px) {
+    width: 100%;
+  }
+
 `;
 
 const PostsHeaderContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  max-width: 913px;
+  width: 100vw;
+  max-width: 133%;
   min-width: 375px;
+  background-color: red;
 
-  @media screen and (max-width: 375px) {
+  @media screen and (max-width: 480px) {
     min-width: 0;
   }
 
