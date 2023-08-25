@@ -177,8 +177,8 @@ const FormContainer = styled.form`
     height: 31px;
 
     @media screen and (max-width: 480px) {
-      height: 22px;
-      font-size: 13px;
+      height: 25px;
+      font-size: 14px;
     }
   }
 `;
@@ -198,6 +198,6 @@ const PostText = styled.textarea`
   font-size: 16px;
 
   @media screen and (max-width: 480px) {
-    height: 47px;
+    height: 30px;
   }
 `;

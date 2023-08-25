@@ -1,4 +1,4 @@
-import React, { useEffect, useState} from "react";
+import React, { useEffect, useState, useCallback} from "react";
 import TimelinePostItem from "./TimelinePostItem.component";
 import useAuth from "../hooks/useAuth";
 import axios from "axios";
@@ -35,14 +35,14 @@ export default function TimelinePosts() {
           );
         }
       })
-      .catch((err) => {
+      .catch(() => {
         setError(true);
         setLoading(false);
         alert(
           "An error occurred while trying to fetch the posts, please refresh the page"
         );
       });
-      
+
   }, []);
 
 
@@ -56,17 +56,26 @@ export default function TimelinePosts() {
       ) : emptyPage ? (
         <p data-test="message">There are no posts yet</p>
       ) :  (
-        posts.map((post) => <TimelinePostItem data-test="post" key={post.id} post={post} />)
+        posts.map((post) =>
+
+        <TimelinePostItem 
+          data-test="post" 
+          key={post.id} 
+          post={post} 
+          />
+          )
       )}
     </Container>
   );
-}
+};
+
 
 const Container = styled.div`
   margin-top: 20px;  
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   p {
     font-size: 16px;
     color: white;

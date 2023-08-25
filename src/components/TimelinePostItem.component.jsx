@@ -1,24 +1,37 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useCallback } from "react";
 import { styled } from "styled-components";
 import LinkPost from "./LinkPost.component";
 import { LikeComponent } from "./Post.Components/Like.component";
-import { EditOrDelete } from "./Post.Components/EditOrDelete";
+import RepostModal from "../components/Post.Components/ModalRepost";
 import { useNavigate } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
+import axios from "axios";
+import DeletePost from "./Delete-Edit-Post.component";
 
 import userIcon from "../assets/images/icons/userIcon.jpeg";
 import { Link } from "react-router-dom";
 import reactStringReplace from "react-string-replace";
 
-  
 
 export default function TimelinePostItem({ post }) {
-  const {description, userName, profileUrl, id} = post;
 
+  const {description, userName, profileUrl, id} = post;
+  const API_URL = process.env.REACT_APP_API_URL;
+  const { token } = useAuth();
   const textRef = useRef(null);
+  const config = { headers: { Authorization: `Bearer ${token}` } };
+
+  const [editingDescription, setEditingDescription] = useState(null);
   const [isLiked, setIsLiked] = useState(post.liked);
   const [toggle, setToggle] = useState(false);
   const [editing, setEditing] = useState(false);
   const [textValue, setTextValue] = useState(description);
+  const [showRepostModal, setShowRepostModal] = useState(false);
+  const [showRepost, setShowRepost] = useState(false);
+  const [sharing, setSharing] = useState(false);
+  const [repostCount, setRepostCount] = useState({});
+
+
   const handleEditClick = () => {
       setEditing(!editing);
   };
@@ -49,6 +62,57 @@ export default function TimelinePostItem({ post }) {
 
   const descriptionConvertedHashtags = convertHashtagsToLinks(textValue);
 
+  
+    //REPOSTAR POSTS
+      // BUSCAR REPOSTS
+      const getRepost = useCallback(async () => {
+        try {
+          const result = await axios.get(`${API_URL}/posts/repost`, config);
+          const reposts = result.data;
+    
+          const countRepost = {};
+          reposts.forEach((repost) => {
+            const { postId, reposts } = repost;
+            countRepost[postId] = reposts;
+          });
+    
+          setRepostCount(countRepost);
+        } catch (error) {
+          console.error(error);
+          alert("An error occurred while fetching repost counts");
+        }
+      }, [config]);
+    
+    
+      //REPOSTAR
+        const postRepost = useCallback(async () => {
+          setSharing(true);
+      
+          try {
+            await axios.post(
+              `${API_URL}/posts/${id}/repost`,
+              {},
+              config
+            );
+      
+            setRepostCount((prevRepostCount) => ({
+              ...prevRepostCount,
+              [id]: (prevRepostCount[id] || 0) + 1,
+            }));
+      
+            setShowRepost(false);
+          } 
+          catch (error) {
+            console.error(error);
+            alert("An error occurred while reposting the post");
+          } 
+          finally {
+            setSharing(false);
+          }
+      // eslint-disable-next-line
+        }, [config, id]);
+
+
   return (
     <TimelinePost>
       <TimeLinePostLeft>
@@ -60,42 +124,22 @@ export default function TimelinePostItem({ post }) {
             setIsLiked={setIsLiked}
             likeCount={post.LikeCount}
         />
+
+        <RepostModal
+          show={showRepostModal}
+          onClose={() => setShowRepostModal(false)}
+          onConfirm={postRepost}
+          sharing={sharing}
+        />
       </TimeLinePostLeft>
 
       <TimeLinePostRight>
-        <EditOrDelete
-            id={id}
-            textRef={textRef}
-            toggle={toggle}
-            setToggle={setToggle}
-            handleEditClick={handleEditClick}
-        />
+
+      <DeletePost post={post}/>
 
         <h2 onClick={handleClick} data-test="username">
           {userName}
         </h2>
-
-        {editing ? (
-              <>
-                <textarea
-                    ref={textRef} 
-                    defaultValue={textValue}
-                    className="description" 
-                    onKeyDown={(e) => handleKey(e)}            
-                    style={{
-                          fontFamily: "Arial, sans-serif",
-                          fontSize: "14px",
-                          padding: "10px",
-                          border: "1px solid #ccc",
-                          borderRadius: "4px",
-                          width: "100%",
-                          height: "100%"
-                    }}
-                  />
-                </>
-            ) : (<>
-              <p data-test="description">{convertHashtagsToLinks(textValue)}</p></>
-            )}
 
         <LinkPost metadata={post.metadata} link={post.link}/>
       </TimeLinePostRight>
@@ -134,7 +178,7 @@ const TimeLinePostLeft = styled.div`
 `;
 
 const TimeLinePostRight = styled.div`
-  width: 80%;
+  width: 90%;
   display: flex;
   flex-direction: column;
   padding: 10px;

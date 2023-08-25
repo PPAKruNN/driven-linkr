@@ -4,8 +4,6 @@ import {PiPencilBold} from 'react-icons/pi';
 import { useState, useCallback, useEffect, useRef} from "react";
 import useAuth from "../hooks/useAuth";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
-
 
 
 export default function DeletePost({ post }){
@@ -20,6 +18,7 @@ export default function DeletePost({ post }){
   const [editingDescription, setEditingDescription] = useState(null);
   const descriptionRefs = useRef({});
 
+  
       //EDITAR POSTS
           // Lidar com o clique no botão de editar
           const handleEditClick = useCallback(
