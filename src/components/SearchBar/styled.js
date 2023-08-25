@@ -18,6 +18,11 @@ const SearchBarWrapper = styled.div`
   max-width: 563px;
   width: 50vw;
 
+  @media (max-width: 480px) {
+    z-index: 1;
+    width: 100%;
+  }
+
   .search-input {
     height: 20px;
     border-radius: 8px;

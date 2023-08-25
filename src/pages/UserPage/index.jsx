@@ -8,12 +8,13 @@ import {
   FollowButton,
   UnFollowButton,
 } from "./styled.js";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useFormAction } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import api from "../../services/api";
 import TimelinePostItem from "../../components/TimelinePostItem.component";
 import useAuth from "../../hooks/useAuth";
 import useUserContext from "../../hooks/useUserContext";
+import SearchBar from "../../components/SearchBar";
 
 export default function UserPage() {
   const { id } = useParams();
@@ -56,7 +57,7 @@ export default function UserPage() {
           "An error occurred while trying to fetch the posts, please refresh the page"
         );
       });
-  }, [following]);
+  }, [following, id]);
 
   function followUser() {
     followButton.current.disabled = true;
@@ -69,6 +70,9 @@ export default function UserPage() {
       })
       .catch((err) => {
         console.error(err.response.data);
+        alert(
+          "An error occurred while trying to follow this user, please try again later"
+        );
       });
   }
 
@@ -78,11 +82,16 @@ export default function UserPage() {
 
     promise
       .then(() => {
-        setFollowingData(following.filter((followedId) => followedId !== Number(id)));
+        setFollowingData(
+          following.filter((followedId) => followedId !== Number(id))
+        );
         unfollowButton.current.disabled = false;
       })
       .catch((err) => {
         console.error(err.response.data);
+        alert(
+          "An error occurred while trying to unfollow this user, please try again later"
+        );
       });
   }
 
@@ -92,14 +101,30 @@ export default function UserPage() {
   return (
     <UserPageContainer>
       <Nav />
+      <div className="mobile-search-bar">
+        <SearchBar />
+      </div>
       <PostsContainer>
         <PostsHeaderContainer>
           <div>
             <img src={posts[0].profileUrl} alt={posts[0].userName} />
             <h1>{`${posts[0].userName}'s posts`}</h1>
           </div>
+          <div>
+            {Number(id) !== user.userId && !following.includes(Number(id)) ? (
+              <FollowButton onClick={followUser} ref={followButton}>
+                <p>Follow</p>
+              </FollowButton>
+            ) : Number(id) !== user.userId && following.includes(Number(id)) ? (
+              <UnFollowButton onClick={unFollowUser} ref={unfollowButton}>
+                <p>Unfollow</p>
+              </UnFollowButton>
+            ) : (
+              ""
+            )}
+          </div>
         </PostsHeaderContainer>
-        {posts.length > 0 ? (
+        {posts[0].description ? (
           posts.map((post) =>
             post.link ? (
               <TimelinePostItem data-test="post" key={post.id} post={post} />
@@ -108,21 +133,10 @@ export default function UserPage() {
             )
           )
         ) : (
-          <h1>This user has no posts yet</h1>
+          <h2>This user hasn't posted anything yet.</h2>
         )}
       </PostsContainer>
       <SideBarContainer>
-        {Number(id) !== user.userId && !following.includes(Number(id)) ? (
-          <FollowButton onClick={followUser} ref={followButton}>
-            <p>Follow</p>
-          </FollowButton>
-        ) : Number(id) !== user.userId && following.includes(Number(id)) ? (
-          <UnFollowButton onClick={unFollowUser} ref={unfollowButton}>
-            <p>Unfollow</p>
-          </UnFollowButton>
-        ) : (
-          ""
-        )}
         <TrendingTags />
       </SideBarContainer>
     </UserPageContainer>

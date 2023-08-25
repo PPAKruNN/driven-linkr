@@ -6,14 +6,29 @@ const UserPageContainer = styled.div`
   flex-direction: row;
   justify-content: space-between;
   margin-top: 40px;
+
+  @media (max-width: 480px) {
+    width: 100vw;
+    flex-direction: column;
+  }
+
+  .mobile-search-bar {
+    margin-top: 35px;
+    padding: 0 10px;
+
+    @media (min-width: 481px) {
+      display: none;
+    }
+  }
 `;
 
 const SideBarContainer = styled.div`
-  flex: 1;
   margin-left: 40px;
   display: flex;
   align-items: start;
   flex-direction: column;
+  margin-top: 165px;
+  z-index: 0;
   @media screen and (max-width: 480px) {
     display: none;
   }
@@ -21,13 +36,29 @@ const SideBarContainer = styled.div`
 
 const PostsContainer = styled.div`
   width: 75%;
-
-  h1 {
-    font-weight: 700;
+  margin-top: 40px;
+  
+  h1,
+  h2 {
+    color: #fff;
+    font-family: Oswald;
     font-size: 43px;
-    line-height: 63px;
-    margin-bottom: 30px;
-    margin-top: 50px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    @media screen and (max-width: 480px) {
+      font-size: 33px;
+    }
+  }
+
+  h2 {
+    @media screen and (max-width: 480px) {
+      margin-left: 17px;
+    }
+  }
+
+  @media screen and (max-width: 480px) {
+    width: 100%;
   }
 `;
 
@@ -35,18 +66,23 @@ const PostsHeaderContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  max-width: 913px;
+  width: 100vw;
+  max-width: 70vw;
   min-width: 375px;
+  height: 64px;
+  margin-bottom: 41px;
+  margin-top: 20px;
 
-  @media screen and (max-width: 375px) {
-    min-width: 0;
+  @media screen and (max-width: 480px) {
+    min-width: 100vw;
   }
 
   img {
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    margin-top: 30px;
+    margin-top: 20px;
+    margin-left: 30px;
   }
 
   div {
@@ -64,7 +100,6 @@ const FollowButton = styled.button`
   justify-content: center;
   border-radius: 5px;
   background: #1877f2;
-  margin-top: 85px;
   align-self: end;
   cursor: pointer;
 
@@ -85,6 +120,10 @@ const FollowButton = styled.button`
     font-weight: 700;
     line-height: normal;
   }
+
+  @media screen and (max-width: 480px) {
+    margin-right: 17px;
+  }
 `;
 
 const UnFollowButton = styled.button`
@@ -95,7 +134,6 @@ const UnFollowButton = styled.button`
   justify-content: center;
   border-radius: 5px;
   background: #fff;
-  margin-top: 85px;
   align-self: end;
   cursor: pointer;
 
@@ -115,6 +153,10 @@ const UnFollowButton = styled.button`
     font-style: normal;
     font-weight: 700;
     line-height: normal;
+  }
+
+  @media screen and (max-width: 480px) {
+    margin-right: 17px;
   }
 `;
 
