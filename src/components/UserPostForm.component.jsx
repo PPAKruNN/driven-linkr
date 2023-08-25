@@ -36,6 +36,7 @@ export default function PostForm() {
         .then(() => {
           setUrl("");
           setDescription("");
+          window.location.reload();
         })
         .catch((error) => {
           console.log(error)
@@ -111,6 +112,10 @@ const ImageBox = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 10px;
+
+  @media screen and (max-width: 480px) {
+    display: none;
+  }
 `;
 
 const UserImage = styled.img`
@@ -149,16 +154,19 @@ const FormContainer = styled.form`
     background-color: #efefef;
     height: 30px;
   }
+
   input::placeholder {
     font-family: "Lato";
     font-weight: 300;
     color: #949494;
   }
+
   :focus {
     outline: none;
     border: 1px solid transparent;
     box-shadow: 0px 0px 3px 1px #b7b7b7;
   }
+
   button {
     background-color: #1877f2;
     border-radius: 5px;
@@ -166,7 +174,12 @@ const FormContainer = styled.form`
     font-family: Lato;
     font-weight: 700;
     font-size: 14px;
-    line-height: 16px;
+    height: 31px;
+
+    @media screen and (max-width: 480px) {
+      height: 22px;
+      font-size: 13px;
+    }
   }
 `;
 
@@ -183,4 +196,8 @@ const PostText = styled.textarea`
   font-family: "Lato";
   font-weight: 300;
   font-size: 16px;
+
+  @media screen and (max-width: 480px) {
+    height: 47px;
+  }
 `;
