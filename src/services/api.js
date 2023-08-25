@@ -2,10 +2,10 @@ import axios from "axios";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
-function tokenProvider(auth) {
+function tokenProvider(token) {
   return {
     headers: {
-      Authorization: `Bearer ${auth}`,
+      Authorization: `Bearer ${token}`,
     },
   };
 }
@@ -40,6 +40,18 @@ function followUser(auth, id) {
   return promise;
 }
 
+function submitComment(auth, postId, message) {
+  const promise = axios.post(`${API_URL}/commentaries`, {postId, message}, tokenProvider(auth));
+
+  return promise;
+}
+
+function getComments(auth, postId) {
+  const promise = axios.get(`${API_URL}/commentaries/${postId}`, tokenProvider(auth));
+
+  return promise;
+}
+
 function getFollowing(auth) {
   const promise = axios.get(`${API_URL}/users/following`, tokenProvider(auth));
 
@@ -60,7 +72,8 @@ const api = {
   followUser,
   unFollowUser,
   getFollowing,
-  unFollowUser,
+  submitComment,
+  getComments
 };
 
 export default api;

@@ -102,7 +102,7 @@ const NavMid = styled.div`
   align-items: center;
   justify-content: center;
   margin-left: 16px;
-  @media screen and (max-width: 375px) {
+  @media screen and (max-width: 480px) {
     display: none;
   }
 `
