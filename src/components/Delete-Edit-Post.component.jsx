@@ -18,7 +18,7 @@ export default function DeletePost({ post }){
   const [editingDescription, setEditingDescription] = useState(null);
   const descriptionRefs = useRef({});
 
-  
+
       //EDITAR POSTS
           // Lidar com o clique no botão de editar
           const handleEditClick = useCallback(
@@ -140,5 +140,4 @@ const CsEditOrDelete = styled.div`
         height: 23px; 
         cursor: pointer; 
     }
-
 `;
