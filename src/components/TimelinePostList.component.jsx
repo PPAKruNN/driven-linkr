@@ -4,6 +4,8 @@ import useAuth from "../hooks/useAuth";
 import axios from "axios";
 import loadingImage from "../assets/images/icons/loadingImage.gif";
 import { styled } from "styled-components";
+import InfiniteScroll from 'react-infinite-scroller';
+
 
 export default function TimelinePosts() {
 
@@ -15,6 +17,8 @@ export default function TimelinePosts() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [emptyPage, setEmptyPage] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const [currentPage, setCurrentPage] = useState(0);
 
 
   //CARREGAR POSTS
@@ -42,21 +46,47 @@ export default function TimelinePosts() {
           "An error occurred while trying to fetch the posts, please refresh the page"
         );
       });
-      
-  }, []);
+
+  }, [currentPage]);
+  
+const loadFunc = () => {
+  axios
+    .get(`${API_URL}/posts?offset=${currentPage + 10}`, config)
+    .then((res) => {
+      const newPosts = posts.concat(res.data);
+      if (newPosts.length > 0) {
+        setPosts(newPosts);
+        setCurrentPage(currentPage + 10);
+      } else {
+        setHasMore(false);
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
 
 
   return (
     <Container>
       {loading ? (
-         <Image src={loadingImage} alt="Loading..." />
+        <Image src={loadingImage} alt="Loading..." />
       ) : error ? (
         <p> An error occurred while trying to fetch the posts, please refresh
-        the page </p>
+          the page </p>
       ) : emptyPage ? (
         <p data-test="message">There are no posts yet</p>
-      ) :  (
-        posts.map((post) => <TimelinePostItem data-test="post" key={post.id} post={post} />)
+      ) : (
+        <InfiniteScroll
+          pageStart={0} valor default  de pagina inicial mas não ta sendo exibido pagina
+          loadMore={loadFunc}//aquii é uma func que vai ser chamada sempre que o scroll chegar ao final
+          hasMore={hasMore}//se isso for false ele não chama a func msm que o scroll chegue ao final
+          loader={<div className="loader" key={0}>Loading ...</div>}//teta de load que vai ser ser exibida enquanto não renderiza os componentes
+        >
+          {posts.map((post) => <TimelinePostItem data-test="post" key={post.id} post={post} />)}
+        </InfiniteScroll>
+
       )}
     </Container>
   );
