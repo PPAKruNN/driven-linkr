@@ -30,7 +30,6 @@ export default function TimelinePosts() {
   const [hasMore, setHasMore] = useState(true);
   const [currentPage, setCurrentPage] = useState(0);
 
-	console.log(posts);
   //CARREGAR POSTS
   useEffect(() => {
     axios
@@ -41,7 +40,7 @@ export default function TimelinePosts() {
           const followingResults = res.data.posts.filter((post) =>
             following.includes(post.author)
           );
-          setPosts(followingResults);
+          setPosts(res.data.posts);
           setLoading(false);
         } else {
           console.error(res.data);
