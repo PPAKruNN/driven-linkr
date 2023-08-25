@@ -48,6 +48,7 @@ export default function TimelinePosts() {
       });
 
   }, [currentPage]);
+ 
   
 const loadFunc = () => {
   axios
@@ -66,8 +67,6 @@ const loadFunc = () => {
     });
 };
 
-
-
   return (
     <Container>
       {loading ? (
@@ -79,10 +78,10 @@ const loadFunc = () => {
         <p data-test="message">There are no posts yet</p>
       ) : (
         <InfiniteScroll
-          pageStart={0} valor default  de pagina inicial mas não ta sendo exibido pagina
-          loadMore={loadFunc}//aquii é uma func que vai ser chamada sempre que o scroll chegar ao final
-          hasMore={hasMore}//se isso for false ele não chama a func msm que o scroll chegue ao final
-          loader={<div className="loader" key={0}>Loading ...</div>}//teta de load que vai ser ser exibida enquanto não renderiza os componentes
+          pageStart={0} //valor default de pagina inicial mas não ta sendo exibido pagina
+          loadMore={loadFunc} //aquii é uma func que vai ser chamada sempre que o scroll chegar ao final
+          hasMore={hasMore} //se isso for false ele não chama a func msm que o scroll chegue ao final
+          loader={<div className="loader" key={0}>Loading ...</div>} //teta de load que vai ser ser exibida enquanto não renderiza os componentes
         >
           {posts.map((post) => <TimelinePostItem data-test="post" key={post.id} post={post} />)}
         </InfiniteScroll>

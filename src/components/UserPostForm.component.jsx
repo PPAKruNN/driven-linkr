@@ -19,7 +19,7 @@ export default function PostForm() {
 
   function handlePost(e) {
     
-    if (!url) {
+    if (url === "") {
       alert("Please, enter the URL of your post!");
     } else {
       setPublishing(true);
