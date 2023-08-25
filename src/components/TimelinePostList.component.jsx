@@ -4,18 +4,28 @@ import useAuth from "../hooks/useAuth";
 import axios from "axios";
 import loadingImage from "../assets/images/icons/loadingImage.gif";
 import { styled } from "styled-components";
+import dayjs from 'dayjs';
+import useInterval from 'use-interval'
+import { LoadMore } from "./Post.Components/LoadMore";
 import useUserContext from "../hooks/useUserContext";
 import InfiniteScroll from 'react-infinite-scroller';
+
 
 export default function TimelinePosts() {
   const API_URL = process.env.REACT_APP_API_URL;
   const { token } = useAuth();
   const config = { headers: { Authorization: `Bearer ${token}` } };
-
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [emptyPage, setEmptyPage] = useState(false);
+  const [showRepost, setShowRepost] = useState(false);
+  const [sharing, setSharing] = useState(false);
+  const [repostCount, setRepostCount] = useState({});
+  const [selectedPostId, setSelectedPostId] = useState(null);
+  const [lastTime, setLastTime] = useState(dayjs().format('YYYY-MM-DD HH:mm:ss'));
+  const [displayLoadMore, setDisplayLoadMore] = useState(false);
+  const [amountNewPosts, setAmountNewPosts] = useState(0);
   const { following } = useUserContext();
   const [hasMore, setHasMore] = useState(true);
   const [currentPage, setCurrentPage] = useState(0);
@@ -55,18 +65,30 @@ const loadFunc = () => {
   axios
     .get(`${API_URL}/posts?offset=${currentPage + 10}`, config)
     .then((res) => {
-      const newPosts = posts.concat(res.data);
+      const newPosts = posts.concat(res.data.posts);
       if (newPosts.length > 0) {
         setPosts(newPosts);
         setCurrentPage(currentPage + 10);
       } else {
         setHasMore(false);
       }
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-};
+    }, [config, selectedPostId]);
+  }
+
+  useInterval( () => {
+    axios.get(`${API_URL}/posts/new-posts?recentUpdate=${lastTime}`)
+      .then(res=>{
+        console.log('aqui é a quantidade de novos posts')
+        console.log(res.data)
+        if(res.data>0){
+          setAmountNewPosts(res.data);
+          setDisplayLoadMore(true)
+        }else{
+          setDisplayLoadMore(false)
+        }
+
+      }).catch(err=>console.log(err));
+  }, 15000)
 
   return (
     <Container>
@@ -76,8 +98,15 @@ const loadFunc = () => {
         <p> An error occurred while trying to fetch the posts, please refresh
           the page </p>
       ) : emptyPage ? (
-        <p data-test="message">There are no posts yet</p>
-      ) : following.length === 0 ? (
+        <></>
+      ) : (
+        <LoadMore 
+              displayLoadMore={displayLoadMore}
+              amountNewPosts={amountNewPosts}
+        />
+      )}
+      
+      {following.length === 0 ? (
         <p data-test="message">You don't follow anyone yet. Search for new friends!</p>
       ) : posts.length === 0 ? (
         <p data-test="message">No posts found from your friends</p>
