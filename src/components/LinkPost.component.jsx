@@ -39,7 +39,13 @@ const LinkPostContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+
+  @media screen and (max-width: 480px) {
+    width: 60vw;
+    height: auto;
+  }
 `;
+
 const LinkPostContainerRight = styled.div`
   width: 30%;
 `;
@@ -47,8 +53,7 @@ const LinkPostContainerRight = styled.div`
 const LinkPostContainerLeft = styled.div`
   width: 70%;
   box-sizing: border-box;
-  margin: 10px 0 10px 0;
-  padding: 16px;
+  padding: 10px;
 
   h2 {
     font-size: 16px;
@@ -60,6 +65,17 @@ const LinkPostContainerLeft = styled.div`
     font-size: 11px;
     line-height: 13px;
     word-wrap: break-word;
+    margin-bottom: 12px;
+  }
+
+  a {
+    font-size: 11px;
+    line-height: 13px;
+    word-wrap: break-word;
+  }
+
+  @media screen and (max-width: 480px) {
+    height: auto;
   }
 `;
 
@@ -67,8 +83,15 @@ const LinkPostImage = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-top-right-radius: 11px;
-  border-bottom-right-radius: 11px;
+  border-radius: 11px;
+  border: none;
+
+
+  @media screen and (max-width: 480px) {
+    width: 15vw;
+    height: 15vh;
+  }
 `;
+
 
 export default LinkPost;

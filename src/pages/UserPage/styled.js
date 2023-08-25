@@ -13,9 +13,11 @@ const SideBarContainer = styled.div`
   margin-left: 40px;
   display: flex;
   align-items: start;
-  flex-direction: column;
-  gap: 60px;
+  flex-dire
   z-index: 0;
+  @media screen and (max-width: 480px) {
+    display: none;
+  }
 `;
 
 const PostsContainer = styled.div`
@@ -34,7 +36,12 @@ const PostsHeaderContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  min-width: 913px;
+  max-width: 913px;
+  min-width: 375px;
+
+  @media screen and (max-width: 375px) {
+    min-width: 0;
+  }
 
   img {
     width: 50px;

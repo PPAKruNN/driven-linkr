@@ -4,6 +4,7 @@ import LinkPost from "./LinkPost.component";
 import { LikeComponent } from "./Post.Components/Like.component";
 import { EditOrDelete } from "./Post.Components/EditOrDelete";
 import { useNavigate } from "react-router-dom";
+import DeletePost from "./Delete-Edit-Post.component";
 
 import userIcon from "../assets/images/icons/userIcon.jpeg";
 import { Link } from "react-router-dom";
@@ -67,12 +68,7 @@ export default function TimelinePostItem({ post }) {
       </TimeLinePostLeft>
 
       <TimeLinePostRight>
-        <EditOrDelete
-            id={id}
-            textRef={textRef}
-            toggle={toggle}
-            setToggle={setToggle}
-            handleEditClick={handleEditClick}
+        <DeletePost post={post}
         />
 
         <h2 onClick={handleClick} data-test="username">
@@ -120,7 +116,13 @@ const TimelinePost = styled.div`
   background-color: #171717;
   padding: 10px;
   margin-bottom: 20px;
-  //border: 1px solid red;
+
+  @media screen and (min-width: 480px) {
+    flex-direction: row;
+  }
+  @media screen and (max-width: 480px) {
+    width: 375px;
+  }
 `;
 
 const TimeLinePostLeft = styled.div`
@@ -132,32 +134,33 @@ const TimeLinePostLeft = styled.div`
 `;
 
 const TimeLinePostRight = styled.div`
-  width: 90%;
+  width: 80%;
   display: flex;
   flex-direction: column;
   padding: 10px;
   position: relative;
   h2 {
-    line-height: 1.1em;
-    font-size: 26px;
-    font-weight: 500;
+    color: #FFFFFF;
+    line-height: 23px;
+    font-size: 19px;
+    font-weight: 700;
+    margin-bottom: 12px;
     &:hover {
       cursor: pointer;
     }
   }
   p {
-    font-size: 12px;
-    margin-top: 12px;
+    font-size: 17px;
     margin-bottom: 12px;
-    font-size: 20px;
-    color: #b7b7b7;
+    color: #B7B7B7;
+    font-weight: 700;
+    word-wrap: break-word;
   }
   .description {
     background-color: white;
     border-radius: 12px;
     height: 10%;
     width: 96.6%;
-
     margin: 6% 0;
   }
 `;
