@@ -73,24 +73,22 @@ const loadFunc = () => {
         setHasMore(false);
       }
     }, [config, selectedPostId]);
+  }
 
-  //VERIFICAR NOVOS POSTS
-   
-    useInterval(()=>{
-        axios.get(`${API_URL}/posts/new-posts?recentUpdate=${lastTime}`)
-          .then(res=>{
-            console.log('aqui é a quantidade de novos posts')
-            console.log(res.data)
-            if(res.data>0){
-              setAmountNewPosts(res.data);
-              setDisplayLoadMore(true)
-            }else{
-              setDisplayLoadMore(false)
-            }
-  
-          }).catch(err=>console.log(err));
-      }, 15000)
-};
+  useInterval( () => {
+    axios.get(`${API_URL}/posts/new-posts?recentUpdate=${lastTime}`)
+      .then(res=>{
+        console.log('aqui é a quantidade de novos posts')
+        console.log(res.data)
+        if(res.data>0){
+          setAmountNewPosts(res.data);
+          setDisplayLoadMore(true)
+        }else{
+          setDisplayLoadMore(false)
+        }
+
+      }).catch(err=>console.log(err));
+  }, 15000)
 
   return (
     <Container>
