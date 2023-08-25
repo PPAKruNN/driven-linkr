@@ -18,11 +18,6 @@ export default function DeletePost({ post }){
   const [editingDescription, setEditingDescription] = useState(null);
   const descriptionRefs = useRef({});
 
-<<<<<<< HEAD
-  
-=======
-
->>>>>>> main
       //EDITAR POSTS
           // Lidar com o clique no botão de editar
           const handleEditClick = useCallback(
